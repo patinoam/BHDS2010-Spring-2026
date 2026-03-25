@@ -1,3 +1,11 @@
+# The lines below are run if the packages were not yet been installed.
+# Otherwise,they are commented out so the code is not executed.
+# install.packages("reshape2")
+
+# The reshape2 package contains the function `melt` to convert data from a wide
+# format to a long format.
+library(reshape2)
+
 # The working directory is retrieved and stored as an object. This assumes that 
 # the local repository on the user's machine is used.
 wd_path <- getwd()
@@ -53,3 +61,35 @@ is.numeric(text_data$Six_months)
 # TRUE is returned which confirms that the variable is numeric.
 is.numeric(text_data$Participant)
 # TRUE is returned which confirms that the variable is numeric.
+
+# The data is reshaped to a long dataset using the function `melt` from the
+# package reshape. It is stored as a new object called `long_text_data`.
+long_text_data <- melt(text_data, id.vars=c("Participant", "Group_Label"), 
+                       measure.vars=c("Baseline", "Six_months"),
+                       variable.name="Time", value.name="Value")
+
+# The command `names` calls the data frame object and returns the variable
+# names from the columns in the data frame.
+names(long_text_data)
+# The output confirms that the variable names include "Participant", 
+# "Group_Label", "Time", and "Value".
+
+# The command `head` prints the first 5 observations from the data frame object 
+# in the console window.
+head(long_text_data)
+# The output confirms that the data is now in a long format.
+
+# The `is.factor` command is to confirm that "Group_Label" and "Time" are
+# categorical.
+is.factor(long_text_data$Group_Label)
+# TRUE is returned which confirms that the variable is categorical.
+is.factor(long_text_data$Time)
+# TRUE is returned which confirms that the variable is categorical.
+
+# The `is.numeric` command is to confirm that "Participant" and "Value" 
+# are numeric.
+is.numeric(long_text_data$Participant)
+# TRUE is returned which confirms that the variable is numeric.
+is.numeric(long_text_data$Value)
+# TRUE is returned which confirms that the variable is numeric.
+
