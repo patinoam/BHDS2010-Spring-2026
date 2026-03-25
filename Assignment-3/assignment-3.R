@@ -1,10 +1,19 @@
 # The lines below are run if the packages were not yet been installed.
 # Otherwise,they are commented out so the code is not executed.
+# install.packages("pastecs")
 # install.packages("reshape2")
+# install.packages("tidyverse")
 
+# The pastecs package contains functions like `stat.desc` and `by` to compute
+# descriptive statistics and stratify data based on a specified categorical
+# variable.
+library(pastecs)
 # The reshape2 package contains the function `melt` to convert data from a wide
 # format to a long format.
 library(reshape2)
+# The tidyverse package contains functions for data wrangling and 
+# generating figures, such as `ggplot`, among others.
+library(tidyverse)
 
 # The working directory is retrieved and stored as an object. This assumes that 
 # the local repository on the user's machine is used.
