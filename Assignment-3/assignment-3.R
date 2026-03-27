@@ -102,3 +102,13 @@ is.numeric(long_text_data$Participant)
 is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
+# TODO add code description
+long_text_data %>% ggplot(aes(x=Time, 
+                              y=Value)) + 
+  stat_summary(fun=mean, geom="bar", fill="White", colour="Black") +
+  stat_summary(fun.data=mean_cl_normal, geom="pointrange", colour="Red") +
+  scale_y_continuous(limits=c(0, 90), breaks=seq(from=0, to=90, by=2)) + 
+  facet_grid(. ~ Group_Label) +
+  labs(title="Bar Plots of Text Message Count by Group and Time", 
+       x="Time", 
+       y="Text Message Count")
