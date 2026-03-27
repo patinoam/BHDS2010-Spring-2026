@@ -102,7 +102,26 @@ is.numeric(long_text_data$Participant)
 is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
-# TODO add code description
+# A faceted bar plot for text message count by group and time is made with 
+# the function `ggplot` from the tidyverse package.
+# Inputs to `ggplot` include the dataset object and the aesthetics function 
+# called `aes`, where we set the categorical variable Time to the 
+# x-axis and continuous variable Value to the y-axis. This 
+# creates the first layer of the figure with the labeled axes. Next, the bar 
+# plot layer is created with the function `stat_summary`, which utilizes the 
+# mean rather than the individual observations. Inputs include defining the 
+# mean as the function, "bar" as the shape, white as the fill, and black as 
+# the outside outline. Another layer is added for the error bars with the 
+# function `stat_summary`, which uses each group's 95% confidence interval, 
+# as well as the pointrange geom in the color red. The function for the 95% 
+# confidence interval is from the package Hmisc. In addition, function 
+# `scale_y_continuous` is used to add another layer with user-defined y-axis 
+# limits. Tick marks are also specified by the input breaks, using  
+# y-axis limit values from 0 to 90 in increments of 2. Another layer is added 
+# using the function `facet_grid` to create subplots to separate the data by 
+# the categorical variable Group_Label, such that data from each group is 
+# displayed in separate columns along the x-axis. Lastly, a layer that specifies 
+# the axes labels and figure title is added.
 long_text_data %>% ggplot(aes(x=Time, 
                               y=Value)) + 
   stat_summary(fun=mean, geom="bar", fill="White", colour="Black") +
@@ -112,3 +131,11 @@ long_text_data %>% ggplot(aes(x=Time,
   labs(title="Bar Plots of Text Message Count by Group and Time", 
        x="Time", 
        y="Text Message Count")
+# The bar charts show the mean value for each time and group along with error  
+# bars, where the x-axis is time, the y-axis is the text message count, and the 
+# subplot columns are group. In Group 1, the mean text message count decreased 
+# from baseline to the six month time point. In Group 2, a similar pattern is 
+# observed, however to a lesser degree. The mean and CI at baseline for both 
+# groups are similar. However, the mean at six months appears to be smaller for
+# Group 1 as compared to Group 2. The CI for the six month data for Group 1 is 
+# larger as comapred to Group 2 as well.
