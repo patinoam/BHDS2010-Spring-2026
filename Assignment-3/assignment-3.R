@@ -102,6 +102,13 @@ is.numeric(long_text_data$Participant)
 is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
+# TODO add code description
+by(text_data$Baseline, text_data$Group_Label, 
+   function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
+
+by(text_data$Six_months, text_data$Group_Label,
+   function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
+
 # A faceted bar plot for text message count by group and time is made with 
 # the function `ggplot` from the tidyverse package.
 # Inputs to `ggplot` include the dataset object and the aesthetics function 
