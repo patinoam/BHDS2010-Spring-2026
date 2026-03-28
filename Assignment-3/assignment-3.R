@@ -104,7 +104,7 @@ is.numeric(long_text_data$Value)
 
 # To compute summary statistics, the data object with a wide format is used. 
 # Here, the continuous variables, Baseline and Six_months, are stored in separate columns. 
-# 
+
 # The summary statistics for these continuous variables can be
 # stratified by the categorical variable, Group_Label, with the function
 # `by` from the pastecs package. The first input argument is the
@@ -114,7 +114,7 @@ is.numeric(long_text_data$Value)
 # `stat.desc`. Specifically, when the function `round` is called, the first
 # input argument is the output from `stat.desc`, and the second input argument
 # is the number of decimal places, which is specified as 4 here.
-# 
+
 # Inputs to `stat.desc` include the following:
 # - basic is set to TRUE to check how many observations are included
 # - desc is set to TRUE to check the descriptive statistics values
@@ -124,11 +124,36 @@ is.numeric(long_text_data$Value)
 # variable, Group_Label.
 by(text_data$Baseline, text_data$Group_Label, 
    function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
+# For the Baseline data, the output indicates that all 25 observations in each
+# group were used to compute the descriptive statistics, since none were
+# missing. The Group 1 has a mean of 64.84, median of 64, variance of 114.0567, 
+# and standard deviation of 10.6797. The range is 38, with a minimum of 47 and a
+# maximum of 85. The Group 2 has a mean of 65.6, median of 65, variance of  
+# 117.4167, and standard deviation of 10.8359. The range is 43, with a minimum 
+# of 46 and a maximum of 89.
+
+# The mean and median are fairly close and only differ by 0.84 and 0.6 for 
+# Group 1 and Group 2, respectively. Thus, using the mean to summarize
+# the data is appropriate. Both groups have a similar mean and overall 
+# variability.
 
 # The continuous variable, Six_months, is stratified by the categorical
 # variable, Group_Label.
 by(text_data$Six_months, text_data$Group_Label,
    function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
+# For the Six Months data, the output indicates that all 25 observations in each
+# group were used to compute the descriptive statistics, since none were
+# missing. The Group 1 has a mean of 52.96, median of 58, variance of 266.7067, 
+# and standard deviation of 16.3312. The range is 69, with a minimum of 9 and a
+# maximum of 78. The Group 2 has a mean of 61.84, median of 62, variance of 
+# 88.5567, and standard deviation of 9.4105. The range is 33, with a minimum of 
+# 46 and a maximum of 79.
+
+# The mean and median for Group 2 are fairly close and differ by 0.16. However, 
+# for Group 1, they differ by 5.04, which is a somewhat large gap and may 
+# warrant further testing for normality. Overall, using the mean to summarize 
+# the data is appropriate. Note that the mean for Group 1 is smaller, larger 
+# range, and thus more variability.
 
 # A faceted bar plot for text message count by group and time is made with 
 # the function `ggplot` from the tidyverse package.
