@@ -102,10 +102,31 @@ is.numeric(long_text_data$Participant)
 is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
-# TODO add code description
+# To compute summary statistics, the data object with a wide format is used. 
+# Here, the continuous variables, Baseline and Six_months, are stored in separate columns. 
+# 
+# The summary statistics for these continuous variables can be
+# stratified by the categorical variable, Group_Label, with the function
+# `by` from the pastecs package. The first input argument is the
+# continuous variable, the second one is the categorical variable, and the
+# third one specifies a function applied to the data. In this case, a
+# new function is defined which combines the use of the functions `round` and
+# `stat.desc`. Specifically, when the function `round` is called, the first
+# input argument is the output from `stat.desc`, and the second input argument
+# is the number of decimal places, which is specified as 4 here.
+# 
+# Inputs to `stat.desc` include the following:
+# - basic is set to TRUE to check how many observations are included
+# - desc is set to TRUE to check the descriptive statistics values
+# - norm is set to FALSE to suppress the normality test output
+
+# The continuous variable, Baseline, is stratified by the categorical
+# variable, Group_Label.
 by(text_data$Baseline, text_data$Group_Label, 
    function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
 
+# The continuous variable, Six_months, is stratified by the categorical
+# variable, Group_Label.
 by(text_data$Six_months, text_data$Group_Label,
    function(x) round(stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE), 4))
 
