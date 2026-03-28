@@ -103,7 +103,8 @@ is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
 # To compute summary statistics, the data object with a wide format is used. 
-# Here, the continuous variables, Baseline and Six_months, are stored in separate columns. 
+# Here, the continuous variables, Baseline and Six_months, are stored in 
+# `separate columns. 
 
 # The summary statistics for these continuous variables can be
 # stratified by the categorical variable, Group_Label, with the function
@@ -191,4 +192,4 @@ long_text_data %>% ggplot(aes(x=Time,
 # observed, however to a lesser degree. The mean and CI at baseline for both 
 # groups are similar. However, the mean at six months appears to be smaller for
 # Group 1 as compared to Group 2. The CI for the six month data for Group 1 is 
-# larger as comapred to Group 2 as well.
+# larger as compared to Group 2 as well.
