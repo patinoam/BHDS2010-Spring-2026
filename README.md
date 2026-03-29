@@ -50,3 +50,17 @@ The R script `assignment-3.R` performs the analysis steps listed below:
 	- Stratified bar chart of text message count
 
 The R Markdown file is run in RStudio to generate the final report as a PDF.
+
+### Team Contributions
+
+The tasks, assignee, and associated pull requests are summarized in the table below.
+
+| Task                | Assignee       | Pull Requests                                                                                                    |
+| ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Create repository   | Angelica       |                                                                                                                  |
+| Data preparation    | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/2                                                          |
+| Summary statistics  | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/4, https://github.com/patinoam/BHDS2010-Spring-2026/pull/6 |
+| Boxplot             | Jess           | https://github.com/patinoam/BHDS2010-Spring-2026/pull/5                                                          |
+| Bar chart           | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/3                                                          |
+| Final report review | Jess, Angelica |                                                                                                                  |
+| Update README       | Angelica       |                                                                                                                  |
