@@ -1,3 +1,7 @@
+#####
+##### Data preparation
+#####
+
 # The lines below are run if the packages were not yet been installed.
 # Otherwise,they are commented out so the code is not executed.
 # install.packages("pastecs")
@@ -102,6 +106,10 @@ is.numeric(long_text_data$Participant)
 is.numeric(long_text_data$Value)
 # TRUE is returned which confirms that the variable is numeric.
 
+#####
+##### Summary statistics
+#####
+
 # To compute summary statistics, the data object with a wide format is used. 
 # Here, the continuous variables, Baseline and Six_months, are stored in 
 # separate columns. 
@@ -156,6 +164,46 @@ by(text_data$Six_months, text_data$Group_Label,
 # the data is appropriate. Note that the mean for Group 1 is smaller, larger 
 # range, and thus more variability.
 
+#####
+##### Boxplot
+#####
+
+#To measure the difference in baseline count of text messages vs count of 
+#messages after 6 months, we will be employing a box plot.
+#With box plots, the main "box" is comprised of the first/lower and
+#third/upper quartiles, representing 25% and 75% of the data respectively.
+#The line in the middle of the box is representative of the median in the data.
+#Finally, the two lines extending above and below the boxes encompass all data
+#within 1.5x the interquartile range (IQR). Generally, the longer these are,
+#the greater the spread of data present. Any dots outside of these lines are
+#data points that are outliers.
+
+#One benefit of box plots is that they can provide a visualization of the 
+#spread of data, making it easier to spot skewness and overall distribution
+#shape
+
+ggplot(long_text_data, aes(x=Time, y=Value)) +
+  geom_boxplot() +
+  facet_wrap(~Group_Label) +
+  labs(
+    title = "Boxplot of Baseline vs Six Month Text Count",
+    x = "Time",
+    y = "Text Message Count") 
+
+#We see that for both groups of participants, there is a decrease in the median
+#count of texts when comparing their baseline with their six month text count
+#However, it is worth noting that in both groups, the 25th percentile of the
+#baseline falls within the 75th percentile of the six month mark. This could
+#be indicative that the difference in the medians is not statistically 
+#significant
+#Furthermore, we note that in the first group, there are multiple outliers, 
+#particularly in the bottom range, which could have amounted to the 
+#lowered median of the first group
+
+#####
+##### Bar chart
+#####
+
 # A faceted bar plot for text message count by group and time is made with 
 # the function `ggplot` from the tidyverse package.
 # Inputs to `ggplot` include the dataset object and the aesthetics function 
@@ -193,36 +241,3 @@ long_text_data %>% ggplot(aes(x=Time,
 # groups are similar. However, the mean at six months appears to be smaller for
 # Group 1 as compared to Group 2. The CI for the six month data for Group 1 is 
 # larger as comapred to Group 2 as well.
-
-
-#To measure the difference in baseline count of text messages vs count of 
-#messages after 6 months, we will be employing a box plot.
-#With box plots, the main "box" is comprised of the first/lower and
-#third/upper quartiles, representing 25% and 75% of the data respectively.
-#The line in the middle of the box is representative of the median in the data.
-#Finally, the two lines extending above and below the boxes encompass all data
-#within 1.5x the interquartile range (IQR). Generally, the longer these are,
-#the greater the spread of data present. Any dots outside of these lines are
-#data points that are outliers.
-
-#One benefit of box plots is that they can provide a visualization of the 
-#spread of data, making it easier to spot skewness and overall distribution
-#shape
-
-ggplot(long_text_data, aes(x=Time, y=Value)) +
-  geom_boxplot() +
-  facet_wrap(~Group_Label) +
-  labs(
-    title = "Boxplot of Baseline vs Six Month Text Count",
-    x = "Time",
-    y = "Text Message Count") 
-
-#We see that for both groups of participants, there is a decrease in the median
-#count of texts when comparing their baseline with their six month text count
-#However, it is worth noting that in both groups, the 25th percentile of the
-#baseline falls within the 75th percentile of the six month mark. This could
-#be indicative that the difference in the medians is not statistically 
-#significant
-#Furthermore, we note that in the first group, there are multiple outliers, 
-#particularly in the bottom range, which could have amounted to the 
-#lowered median of the first group
