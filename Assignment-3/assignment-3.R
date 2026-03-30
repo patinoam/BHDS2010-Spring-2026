@@ -104,7 +104,7 @@ is.numeric(long_text_data$Value)
 
 # To compute summary statistics, the data object with a wide format is used. 
 # Here, the continuous variables, Baseline and Six_months, are stored in 
-# `separate columns. 
+# separate columns. 
 
 # The summary statistics for these continuous variables can be
 # stratified by the categorical variable, Group_Label, with the function
