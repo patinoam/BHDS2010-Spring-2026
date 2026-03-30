@@ -59,13 +59,13 @@ text_data$Group_Label <- factor(text_data$Group, levels=c(1:2),
                                 labels=c("Group 1", 
                                          "Group 2"))
 
-# The `is.factor` command is run to confirm that "Group_Label"
+# The `is.factor` command is run to confirm that Group_Label
 # is categorical.
 is.factor(text_data$Group_Label)
 # TRUE is returned which confirms that the variable is categorical.
 
-# The `is.numeric` command is to confirm that "Group", "Baseline","Six_months", 
-# and "Participant" are numeric.
+# The `is.numeric` command is to confirm that Group, Baseline,Six_months, 
+# and Participant are numeric.
 is.numeric(text_data$Group)
 # TRUE is returned which confirms that the variable is numeric.
 is.numeric(text_data$Baseline)
@@ -75,8 +75,8 @@ is.numeric(text_data$Six_months)
 is.numeric(text_data$Participant)
 # TRUE is returned which confirms that the variable is numeric.
 
-# The data is reshaped to a long dataset using the function `melt` from the
-# package reshape. It is stored as a new object called `long_text_data`.
+# The data is reshaped to a long format using the function `melt` from the
+# package reshape2. It is stored as a new object called `long_text_data`.
 long_text_data <- melt(text_data, id.vars=c("Participant", "Group_Label"), 
                        measure.vars=c("Baseline", "Six_months"),
                        variable.name="Time", value.name="Value")
@@ -92,14 +92,14 @@ names(long_text_data)
 head(long_text_data)
 # The output confirms that the data is now in a long format.
 
-# The `is.factor` command is to confirm that "Group_Label" and "Time" are
+# The `is.factor` command is to confirm that Group_Label and Time are
 # categorical.
 is.factor(long_text_data$Group_Label)
 # TRUE is returned which confirms that the variable is categorical.
 is.factor(long_text_data$Time)
 # TRUE is returned which confirms that the variable is categorical.
 
-# The `is.numeric` command is to confirm that "Participant" and "Value" 
+# The `is.numeric` command is to confirm that Participant and Value 
 # are numeric.
 is.numeric(long_text_data$Participant)
 # TRUE is returned which confirms that the variable is numeric.
@@ -161,26 +161,26 @@ by(text_data$Six_months, text_data$Group_Label,
 # The mean and median for Group 2 are fairly close and differ by 0.16. However, 
 # for Group 1, they differ by 5.04, which is a somewhat large gap and may 
 # warrant further testing for normality. Overall, using the mean to summarize 
-# the data is appropriate. Note that the mean for Group 1 is smaller, larger 
+# the data is appropriate. Note that Group 1 has a smaller mean, larger 
 # range, and thus more variability.
 
 #####
 ##### Boxplot
 #####
 
-#To measure the difference in baseline count of text messages vs count of 
-#messages after 6 months, we will be employing a box plot.
-#With box plots, the main "box" is comprised of the first/lower and
-#third/upper quartiles, representing 25% and 75% of the data respectively.
-#The line in the middle of the box is representative of the median in the data.
-#Finally, the two lines extending above and below the boxes encompass all data
-#within 1.5x the interquartile range (IQR). Generally, the longer these are,
-#the greater the spread of data present. Any dots outside of these lines are
-#data points that are outliers.
+# To measure the difference in baseline count of text messages vs count of 
+# messages after 6 months, we will be employing a box plot.
+# With box plots, the main "box" is comprised of the first/lower and
+# third/upper quartiles, representing 25% and 75% of the data respectively.
+# The line in the middle of the box is representative of the median in the data.
+# Finally, the two lines extending above and below the boxes encompass all data
+# within 1.5x the interquartile range (IQR). Generally, the longer these are,
+# the greater the spread of data present. Any dots outside of these lines are
+# data points that are outliers.
 
-#One benefit of box plots is that they can provide a visualization of the 
-#spread of data, making it easier to spot skewness and overall distribution
-#shape
+# One benefit of box plots is that they can provide a visualization of the 
+# spread of data, making it easier to spot skewness and overall distribution
+# shape
 
 ggplot(long_text_data, aes(x=Time, y=Value)) +
   geom_boxplot() +
@@ -190,15 +190,15 @@ ggplot(long_text_data, aes(x=Time, y=Value)) +
     x = "Time",
     y = "Text Message Count") 
 
-#We see that for both groups of participants, there is a decrease in the median
-#count of texts when comparing their baseline with their six month text count
-#However, it is worth noting that in both groups, the 25th percentile of the
-#baseline falls within the 75th percentile of the six month mark. This could
-#be indicative that the difference in the medians is not statistically 
-#significant
-#Furthermore, we note that in the first group, there are multiple outliers, 
-#particularly in the bottom range, which could have amounted to the 
-#lowered median of the first group
+# We see that for both groups of participants, there is a decrease in the median
+# count of texts when comparing their baseline with their six month text count
+# However, it is worth noting that in both groups, the 25th percentile of the
+# baseline falls within the 75th percentile of the six month mark. This could
+# be indicative that the difference in the medians is not statistically 
+# significant
+# Furthermore, we note that in the first group, there are multiple outliers, 
+# particularly in the bottom range, which could have amounted to the 
+# lowered median of the first group
 
 #####
 ##### Bar chart
@@ -240,4 +240,4 @@ long_text_data %>% ggplot(aes(x=Time,
 # observed, however to a lesser degree. The mean and CI at baseline for both 
 # groups are similar. However, the mean at six months appears to be smaller for
 # Group 1 as compared to Group 2. The CI for the six month data for Group 1 is 
-# larger as comapred to Group 2 as well.
+# larger as compared to Group 2 as well.
