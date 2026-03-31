@@ -162,13 +162,15 @@ long_text_data %>% ggplot(aes(x=Time,
 #spread of data, making it easier to spot skewness and overall distribution
 #shape
 
-ggplot(long_text_data, aes(x=Time, y=Value)) +
+ggplot(long_text_data, aes(x=Time, y=Value, color=Time)) +
   geom_boxplot() +
   facet_wrap(~Group_Label) +
   labs(
     title = "Boxplot of Baseline vs Six Month Text Count",
     x = "Time",
-    y = "Text Message Count") 
+    y = "Text Message Count") +
+  scale_fill_manual(values = c("Baseline" = "orange", "Six_months" = 
+                                 "darkturquoise"))
 
 #We see that for both groups of participants, there is a decrease in the median
 #count of texts when comparing their baseline with their six month text count
