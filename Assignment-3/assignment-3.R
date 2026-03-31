@@ -81,6 +81,10 @@ long_text_data <- melt(text_data, id.vars=c("Participant", "Group_Label"),
                        measure.vars=c("Baseline", "Six_months"),
                        variable.name="Time", value.name="Value")
 
+# For the Time variable, the string "Six_months" is changed to "Six Months" to
+# improve legibility of figures that will use this label.
+long_text_data$Time <- gsub("Six_months", "Six Months", long_text_data$Time)
+
 # The command `names` calls the data frame object and returns the variable
 # names from the columns in the data frame.
 names(long_text_data)
@@ -182,11 +186,11 @@ by(text_data$Six_months, text_data$Group_Label,
 # spread of data, making it easier to spot skewness and overall distribution
 # shape
 
-ggplot(long_text_data, aes(x=Time, y=Value)) +
+ggplot(long_text_data, aes(x=Time, y=Value, colour=Time)) +
   geom_boxplot() +
   facet_wrap(~Group_Label) +
   labs(
-    title = "Boxplot of Baseline vs Six Month Text Count",
+    title = "Boxplot of Text Message Count by Group and Time",
     x = "Time",
     y = "Text Message Count") 
 
@@ -204,33 +208,32 @@ ggplot(long_text_data, aes(x=Time, y=Value)) +
 ##### Bar chart
 #####
 
-# A faceted bar plot for text message count by group and time is made with 
+# A faceted bar chart for text message count by group and time is made with 
 # the function `ggplot` from the tidyverse package.
-# Inputs to `ggplot` include the dataset object and the aesthetics function 
-# called `aes`, where we set the categorical variable Time to the 
-# x-axis and continuous variable Value to the y-axis. This 
-# creates the first layer of the figure with the labeled axes. Next, the bar 
-# plot layer is created with the function `stat_summary`, which utilizes the 
+# Inputs to `ggplot` include the dataset object, the aesthetics function 
+# called `aes`, where we set the categorical variable Time to the x-axis and 
+# continuous variable Value to the y-axis, and assigning Time for color coding. 
+# This creates the first layer of the figure with the labeled axes. Next, the 
+# bar chart layer is created with the function `stat_summary`, which utilizes the 
 # mean rather than the individual observations. Inputs include defining the 
-# mean as the function, "bar" as the shape, white as the fill, and black as 
-# the outside outline. Another layer is added for the error bars with the 
-# function `stat_summary`, which uses each group's 95% confidence interval, 
-# as well as the pointrange geom in the color red. The function for the 95% 
-# confidence interval is from the package Hmisc. In addition, function 
-# `scale_y_continuous` is used to add another layer with user-defined y-axis 
-# limits. Tick marks are also specified by the input breaks, using  
-# y-axis limit values from 0 to 90 in increments of 2. Another layer is added 
-# using the function `facet_grid` to create subplots to separate the data by 
-# the categorical variable Group_Label, such that data from each group is 
-# displayed in separate columns along the x-axis. Lastly, a layer that specifies 
-# the axes labels and figure title is added.
+# mean as the function, "bar" as the shape and white as the fill. 
+# Another layer is added for the error bars with the function `stat_summary`, 
+# which uses each group's 95% confidence interval. The function for the 95% 
+# confidence interval is from the package Hmisc. 
+# In addition, function `scale_y_continuous` is used to add another layer 
+# with user-defined y-axis limits. Tick marks are also specified by the input 
+# breaks, using y-axis limit values from 0 to 90 in increments of 5. 
+# Another layer is added using the function `facet_grid` to create subplots to 
+# separate the data by the categorical variable Group_Label, such that data 
+# from each group is displayed in separate columns along the x-axis. Lastly, a 
+# layer that specifies the axes labels and figure title is added.
 long_text_data %>% ggplot(aes(x=Time, 
-                              y=Value)) + 
-  stat_summary(fun=mean, geom="bar", fill="White", colour="Black") +
-  stat_summary(fun.data=mean_cl_normal, geom="pointrange", colour="Red") +
-  scale_y_continuous(limits=c(0, 90), breaks=seq(from=0, to=90, by=2)) + 
+                              y=Value, colour=Time)) + 
+  stat_summary(fun=mean, geom="bar", fill="White") +
+  stat_summary(fun.data=mean_cl_normal, geom="pointrange") +
+  scale_y_continuous(limits=c(0, 90), breaks=seq(from=0, to=90, by=5)) + 
   facet_grid(. ~ Group_Label) +
-  labs(title="Bar Plots of Text Message Count by Group and Time", 
+  labs(title="Bar Charts of Text Message Count by Group and Time", 
        x="Time", 
        y="Text Message Count")
 # The bar charts show the mean value for each time and group along with error  
