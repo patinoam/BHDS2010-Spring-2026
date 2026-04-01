@@ -192,7 +192,9 @@ ggplot(long_text_data, aes(x=Time, y=Value, colour=Time)) +
   labs(
     title = "Boxplot of Text Message Count by Group and Time",
     x = "Time",
-    y = "Text Message Count") 
+    y = "Text Message Count") +
+  scale_color_manual(values = c("Baseline" = "orange", 
+                                "Six Months" = "darkturquoise"))
 
 # We see that for both groups of participants, there is a decrease in the median
 # count of texts when comparing their baseline with their six month text count
@@ -235,7 +237,9 @@ long_text_data %>% ggplot(aes(x=Time,
   facet_grid(. ~ Group_Label) +
   labs(title="Bar Charts of Text Message Count by Group and Time", 
        x="Time", 
-       y="Text Message Count")
+       y="Text Message Count")+
+  scale_color_manual(values = c("Baseline" = "orange", 
+                                "Six Months" = "darkturquoise"))
 # The bar charts show the mean value for each time and group along with error  
 # bars, where the x-axis is time, the y-axis is the text message count, and the 
 # subplot columns are group. In Group 1, the mean text message count decreased 
