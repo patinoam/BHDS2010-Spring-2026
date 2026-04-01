@@ -2,7 +2,7 @@
 ##### Data preparation
 #####
 
-# The lines below are run if the packages were not yet been installed.
+# The lines below are run if the packages were not yet installed.
 # Otherwise,they are commented out so the code is not executed.
 # install.packages("pastecs")
 # install.packages("reshape2")
@@ -83,7 +83,8 @@ long_text_data <- melt(text_data, id.vars=c("Participant", "Group_Label"),
 
 # For the Time variable, the string "Six_months" is changed to "Six Months" to
 # improve legibility of figures that will use this label.
-long_text_data$Time <- gsub("Six_months", "Six Months", long_text_data$Time)
+long_text_data$Time <- as.factor(gsub("Six_months", "Six Months", 
+                                      long_text_data$Time))
 
 # The command `names` calls the data frame object and returns the variable
 # names from the columns in the data frame.
