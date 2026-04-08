@@ -62,5 +62,5 @@ The tasks, assignee, and associated pull requests are summarized in the table be
 | Summary statistics  | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/4, https://github.com/patinoam/BHDS2010-Spring-2026/pull/6 |
 | Boxplot             | Jess           | https://github.com/patinoam/BHDS2010-Spring-2026/pull/5                                                          |
 | Bar chart           | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/3                                                          |
-| Final report review | Jess, Angelica |                                                                                                                  |
-| Update README       | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/7                                                           |
+| Final report review | Jess, Angelica | https://github.com/patinoam/BHDS2010-Spring-2026/pull/8                                                          |
+| Update README       | Angelica       | https://github.com/patinoam/BHDS2010-Spring-2026/pull/7                                                          |

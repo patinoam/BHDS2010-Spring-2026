@@ -1,3 +1,12 @@
+---
+title: "Assignment 3"
+author: "Jessica Astorga, Angelica Patino"
+date: "2026-03-31"
+output: pdf_document
+---
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+
 #####
 ##### Data preparation
 #####
@@ -25,7 +34,7 @@ wd_path <- getwd()
 
 # The data file path is stored as an object based on where the data is stored 
 # in the repository and the file name.
-data_path <- paste0(wd_path, "/Assignment-3/TextMessages.csv")
+data_path <- paste0(wd_path, "/TextMessages.csv")
 
 # The data is loaded into the RStudio environment.
 # Since the file has a .csv extension, the function `read.csv` is used.
@@ -249,3 +258,5 @@ long_text_data %>% ggplot(aes(x=Time,
 # groups are similar. However, the mean at six months appears to be smaller for
 # Group 1 as compared to Group 2. The CI for the six month data for Group 1 is 
 # larger as compared to Group 2 as well.
+
+```
