@@ -80,3 +80,22 @@ cases_by_state_data <- all_data %>%
   filter(outcome_type == "case_lab-confirmed") %>% 
   group_by(state) %>% 
   summarise(total_cases = sum(value, na.rm = TRUE))
+
+#####
+##### Shiny App
+#####
+
+# Define UI for application
+ui <- fluidPage(
+  # TODO Declare inputs:
+  
+  # TODO Declare output components:
+)
+
+# Define server logic
+server <- function(input, output){
+  # TODO Declare output variables:
+}
+
+# TODO Run the app (commented out for now)
+# shinyApp(ui = ui, server = server)
