@@ -33,3 +33,11 @@ data_path <- paste0(wd_path,
 # An object is created which contains the imported data from the specified 
 # file path `data_path`.
 all_data <- read.csv(data_path, header=TRUE)
+
+# The column names include the following: location_name, location_id,
+# location_type, date, and outcome_type
+names(all_data)
+
+# It appears that the column location name stores the county and state in the 
+# same string
+head(all_data)
