@@ -45,3 +45,38 @@ head(all_data)
 # Separate columns are created for county and state
 all_data <- all_data %>%
   separate_wider_delim(location_name, delim = ",", names = c("county", "state"))
+
+# The variables value and location are both already numeric
+is.numeric(all_data$value)
+is.numeric(all_data$location_id)
+
+# Convert county, state, location_type, and outcome_type to factors
+if (is.factor(all_data$county) == FALSE) {
+  all_data$county <- as.factor(all_data$county)
+}
+is.factor(all_data$county)
+
+if (is.factor(all_data$state) == FALSE) {
+  all_data$state <- as.factor(all_data$state)
+}
+is.factor(all_data$state)
+
+if (is.factor(all_data$location_type) == FALSE) {
+  all_data$location_type <- as.factor(all_data$location_type)
+}
+is.factor(all_data$location_type)
+
+if (is.factor(all_data$outcome_type) == FALSE) {
+  all_data$outcome_type <- as.factor(all_data$outcome_type)
+}
+is.factor(all_data$outcome_type)
+
+# Convert date to type Date
+all_data$date <- as.Date(all_data$date)
+inherits(all_data$date, "Date")
+
+# Case counts are summed for each state
+cases_by_state_data <- all_data %>% 
+  filter(outcome_type == "case_lab-confirmed") %>% 
+  group_by(state) %>% 
+  summarise(total_cases = sum(value, na.rm = TRUE))
