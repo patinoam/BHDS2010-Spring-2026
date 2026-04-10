@@ -41,3 +41,7 @@ names(all_data)
 # It appears that the column location name stores the county and state in the 
 # same string
 head(all_data)
+
+# Separate columns are created for county and state
+all_data <- all_data %>%
+  separate_wider_delim(location_name, delim = ",", names = c("county", "state"))
