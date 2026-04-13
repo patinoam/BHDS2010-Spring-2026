@@ -267,6 +267,12 @@ ui <- fluidPage(
 
       ### Outputs
 
+      # The leafletOutput function declares the map output component.
+      # The outputId "map" is used in the server to render and update
+      # the map. Width is set to 100% and height to 480 pixels.
+      leafletOutput("map", width = "100%", height = "480px"),
+      br(),
+
       # The plotOutput function declares the weekly case count plot.
       h4("Weekly case counts"),
       plotOutput("line_plot", height = "260px"),
