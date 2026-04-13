@@ -272,6 +272,11 @@ ui <- fluidPage(
       plotOutput("line_plot", height = "260px"),
       br(),
 
+    # The plotOutput function declares the cumulative cases by year chart.
+      h4("Cumulative cases by year"),
+      plotOutput("cumulative_plot", height = "260px"),
+      br(),
+
       # The tableOutput function declares the top locations table.
       h4("Top locations"),
       tableOutput("top_table")
@@ -359,6 +364,28 @@ server <- function(input, output){
       arrange(week)
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
+  # The cumulative_cases reactive groups the filtered data by year and month
+  # and computes the total case count per year-month combination. Within
+  # each year, the function cumsum computes a running total of cases so that
+  # each month's value reflects all cases from January of that year through
+  # the current month. The year column is converted to a factor so that
+  # ggplot2 assigns a distinct color to each year rather than treating
+  # year as a continuous numeric variable.
+  cumulative_cases <- reactive({
+    filtered_raw() %>%
+      mutate(
+        year  = year(date),
+        month = month(date)
+      ) %>%
+      group_by(year, month) %>%
+      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
+      arrange(year, month) %>%
+      group_by(year) %>%
+      mutate(cumulative = cumsum(cases)) %>%
+      ungroup() %>%
+      mutate(year = as.factor(year))
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
   #####
   ##### Weekly case count plot
   #####
@@ -420,6 +447,66 @@ server <- function(input, output){
       )
   }, res = 110)
   
+  #####
+  ##### Cumulative cases by year chart
+  #####
+  
+  # The renderPlot function creates the cumulative cases by year chart using
+  # ggplot2. Each calendar year is drawn as a separate line. The x-axis
+  # displays month abbreviations from January through December. The y-axis
+  # displays the running cumulative case count from the start of each year.
+  # The year_colors vector defined at startup maps each year to a red shade.
+  output$cumulative_plot <- renderPlot({
+    cum <- cumulative_cases()
+    sel <- sel_states()
+    
+    # The subtitle is constructed using the same logic as the weekly chart
+    # to maintain consistency across figures.
+    subtitle <- if (length(sel) > 0) {
+      if (length(sel) <= 3) {
+        paste("Filtered to:", paste(sel, collapse = ", "))
+      } else {
+        paste0("Filtered to ", length(sel), " states")
+      }
+    } else {
+      "All states"
+    }
+    
+    # The x-axis tick marks are set to integers 1 through 12 corresponding
+    # to each calendar month. The built-in R constant month.abb provides
+    # the three-letter abbreviations Jan through Dec as tick labels.
+    ggplot(cum, aes(x = month, y = cumulative, color = year, group = year)) +
+      geom_line(linewidth = 0.9) +
+      geom_point(size = 1.8) +
+      scale_x_continuous(
+        breaks = 1:12,
+        labels = month.abb,
+        limits = c(1, 12)
+      ) +
+      scale_y_continuous(
+        labels = comma,
+        expand = expansion(mult = c(0, 0.1))
+      ) +
+      scale_color_manual(values = year_colors) +
+      labs(
+        x        = NULL,
+        y        = "Cumulative cases",
+        color    = "Year",
+        subtitle = subtitle
+      ) +
+      theme_minimal(base_size = 13) +
+      theme(
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor   = element_blank(),
+        panel.grid.major.y = element_line(color = "#eeeeee"),
+        plot.subtitle      = element_text(color = "#888888", size = 11),
+        axis.text.x        = element_text(size = 11),
+        axis.text.y        = element_text(size = 11),
+        legend.position    = "right",
+        plot.margin        = margin(8, 16, 8, 8)
+      )
+  }, res = 110)
+
   #####
   ##### Top locations table
   #####
