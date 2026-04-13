@@ -189,6 +189,18 @@ ui <- fluidPage(
           }")
         )
       ),
+
+      br(),
+
+      # The actionButton input creates a button labeled Update. All filtered
+      # data reactives in the server are gated on this button, so outputs only 
+      # update when the button is clicked.
+      actionButton(
+        inputId = "update",
+        label   = "Update",
+        width   = "100%",
+        class   = "btn-danger"
+      )
     ),
     
     # The main panel contains all output components. Each output function
