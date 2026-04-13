@@ -161,6 +161,34 @@ ui <- fluidPage(
         start   = date_range[1],
         end     = date_range[2]
       ),
+
+      # The selectizeInput input creates a multi-select dropdown for states.
+      # The option "All States" is assigned the sentinel value "ALL" and is
+      # selected by default. A JavaScript callback defined in the options
+      # argument enforces mutual exclusivity: selecting "All States" clears
+      # all other selections, and selecting any real state removes "All States".
+      # The remove_button plugin adds an X tag to each selected item.
+      selectizeInput(
+        inputId  = "state_filter",
+        label    = "Filter to state(s)",
+        choices  = c("All States" = "ALL", sort(unique(raw$state))),
+        selected = "ALL",
+        multiple = TRUE,
+        options  = list(
+          plugins = list("remove_button"),
+          onItemAdd = I("function(value, item) {
+            if (value === 'ALL') {
+              var current = this.getValue();
+              var filtered = current.filter(function(v) { return v === 'ALL'; });
+              this.setValue(filtered, true);
+            } else {
+              var current = this.getValue();
+              var filtered = current.filter(function(v) { return v !== 'ALL'; });
+              this.setValue(filtered, true);
+            }
+          }")
+        )
+      ),
     ),
     
     # The main panel contains all output components. Each output function
