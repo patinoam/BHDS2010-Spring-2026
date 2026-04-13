@@ -318,6 +318,16 @@ server <- function(input, output){
     }
     d
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
+  # The filtered_county reactive groups the filtered data by county and
+  # computes the total case count per county. The output is used for
+  # the county-level map, the county top locations table, and the
+  # county count summary box.
+  filtered_county <- reactive({
+    filtered_raw() %>%
+      group_by(fips, state, county) %>%
+      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 }
 
 #####
