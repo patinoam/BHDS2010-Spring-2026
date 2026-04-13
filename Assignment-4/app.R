@@ -279,7 +279,20 @@ ui <- fluidPage(
 # as arguments. Input values are read using input$inputId and output values
 # are assigned using output$outputId.
 server <- function(input, output){
-    # TODO Declare output variables:
+
+  #####
+  ##### Helper reactive
+  #####
+  
+  # A helper reactive called sel_states is defined to return the vector of
+  # selected state names with the sentinel value "ALL" removed. This reactive
+  # is called by multiple other reactives below, so defining it here avoids
+  # repeating it.
+  # The reactive returns a character vector of state names, or an empty
+  # character vector if "All States" is selected.
+  sel_states <- reactive({
+    input$state_filter[input$state_filter != "ALL"]
+  })
 }
 
 #####
