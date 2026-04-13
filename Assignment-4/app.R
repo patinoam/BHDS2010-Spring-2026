@@ -128,6 +128,7 @@ ui <- fluidPage(
     # The sidebar panel contains all input controls. Values selected here
     # are passed to the server using the inputId of each control.
     sidebarPanel(
+        
       # The radioButtons input allows the user to select one map level.
       # The inputId "map_level" is used in the server to read this value.
       # The choices argument defines the display labels and their
@@ -137,6 +138,16 @@ ui <- fluidPage(
         label    = "Map level",
         choices  = c("State (aggregated)" = "state", "County" = "county"),
         selected = "state"
+      ),
+
+      # The selectInput input creates a single-select dropdown for the
+      # case type. The outcome_choices vector defined above provides the
+      # display labels and corresponding data values.
+      selectInput(
+        inputId  = "outcome",
+        label    = "Case type",
+        choices  = outcome_choices,
+        selected = "case_lab-confirmed"
       ),
     ),
     
