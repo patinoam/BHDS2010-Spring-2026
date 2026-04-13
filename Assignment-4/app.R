@@ -328,6 +328,17 @@ server <- function(input, output){
       group_by(fips, state, county) %>%
       summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
+  # The filtered_state reactive groups the filtered data by state and
+  # computes the total case count per state. The output is used for
+  # the state-level map, the state top locations table, and the
+  # state count summary box.
+  filtered_state <- reactive({
+    filtered_raw() %>%
+      group_by(state) %>%
+      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+ 
 }
 
 #####
