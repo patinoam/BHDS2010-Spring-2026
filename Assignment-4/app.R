@@ -128,6 +128,16 @@ ui <- fluidPage(
     # The sidebar panel contains all input controls. Values selected here
     # are passed to the server using the inputId of each control.
     sidebarPanel(
+      # The radioButtons input allows the user to select one map level.
+      # The inputId "map_level" is used in the server to read this value.
+      # The choices argument defines the display labels and their
+      # corresponding values returned to the server.
+      radioButtons(
+        inputId  = "map_level",
+        label    = "Map level",
+        choices  = c("State (aggregated)" = "state", "County" = "county"),
+        selected = "state"
+      ),
     ),
     
     # The main panel contains all output components. Each output function
