@@ -265,7 +265,11 @@ ui <- fluidPage(
         }
       "),
 
-      ### TODO Outputs
+      ### Outputs
+
+      # The tableOutput function declares the top locations table.
+      h4("Top locations"),
+      tableOutput("top_table")
 
     )
   )
@@ -338,6 +342,32 @@ server <- function(input, output){
       group_by(state) %>%
       summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
+  #####
+  ##### Top locations table
+  #####
+  
+  # The renderTable function creates the top locations table. The table
+  # displays the ten locations with the highest case counts under the
+  # current filter settings. When the map level is set to state, one row
+  # per state is returned. When set to county, one row per county is
+  # returned with a combined location label in the format
+  # "County, State". The digits argument suppresses decimal places and the
+  # format.args argument adds comma separators to case count values.
+  output$top_table <- renderTable({
+    if (input$map_level == "state") {
+      filtered_state() %>%
+        arrange(desc(cases)) %>%
+        slice_head(n = 10) %>%
+        rename(State = state, `Total cases` = cases)
+    } else {
+      filtered_county() %>%
+        arrange(desc(cases)) %>%
+        slice_head(n = 10) %>%
+        mutate(Location = paste0(county, " County, ", state)) %>%
+        select(Location, `Total cases` = cases)
+    }
+  }, digits = 0, format.args = list(big.mark = ","))
  
 }
 
