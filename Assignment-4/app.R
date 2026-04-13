@@ -206,6 +206,57 @@ ui <- fluidPage(
     # The main panel contains all output components. Each output function
     # below is paired with a corresponding render function in the server.
     mainPanel(
+
+      # Four summary boxes are arranged in a single row using fluidRow and
+      # column. Each box displays a label and a text output value.
+      fluidRow(
+        column(3, div(class = "summary-box",
+                      div(class = "summary-label", "Total Cases"),
+                      div(class = "summary-value", textOutput("box_total"))
+        )),
+        column(3, div(class = "summary-box",
+                      div(class = "summary-label", "Date Range"),
+                      div(class = "summary-value summary-value-sm", textOutput("box_dates"))
+        )),
+        column(3, div(class = "summary-box",
+                      div(class = "summary-label", "State Count"),
+                      div(class = "summary-value", textOutput("box_states"))
+        )),
+        column(3, div(class = "summary-box",
+                      div(class = "summary-label", "County Count"),
+                      div(class = "summary-value", textOutput("box_counties"))
+        ))
+      ),
+      
+      # The tags$style function injects CSS into the page to style the
+      # summary boxes defined above. Styles are applied by class name.
+      tags$style("
+        .summary-box {
+          background: #f8f8f8;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 14px 16px;
+          margin-bottom: 16px;
+          text-align: center;
+        }
+        .summary-label {
+          font-size: 12px;
+          color: #888;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 4px;
+        }
+        .summary-value {
+          font-size: 26px;
+          font-weight: 600;
+          color: #A61C1C;
+        }
+        .summary-value-sm {
+          font-size: 15px;
+          padding-top: 5px;
+          color: #333;
+        }
+      "),
     )
   )
 )
