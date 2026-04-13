@@ -508,6 +508,37 @@ server <- function(input, output){
   }, res = 110)
 
   #####
+  ##### Summary box outputs
+  #####
+  
+  # The total cases output sums all values in the value column of the
+  # filtered raw data. The comma function from the scales package formats
+  # the result with comma separators.
+  output$box_total <- renderText({
+    comma(sum(filtered_raw()$value, na.rm = TRUE))
+  })
+  
+  # The date range output formats the selected start and end dates as
+  # month, day, and year strings separated by an em dash.
+  output$box_dates <- renderText({
+    paste0(format(input$date_range[1], "%b %d, %Y"),
+           " - ",
+           format(input$date_range[2], "%b %d, %Y"))
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+  
+  # The state count output returns the number of distinct states present
+  # in the filtered state summary data.
+  output$box_states <- renderText({
+    n_distinct(filtered_state()$state)
+  })
+  
+  # The county count output returns the number of counties in the filtered
+  # county summary data that have at least one reported case.
+  output$box_counties <- renderText({
+    filtered_county() %>% filter(cases > 0) %>% nrow()
+  })
+
+  #####
   ##### Top locations table
   #####
   
