@@ -88,3 +88,27 @@ date_range <- range(raw$date, na.rm = TRUE)
 # This vector is used to build a color palette for the cumulative chart
 # that scales automatically if the data spans more than two years.
 data_years <- sort(unique(year(raw$date)))
+
+# A color palette function for the map is defined. It accepts a vector of
+# case count values and returns a leaflet-compatible color scale ranging
+# from light gray at zero cases to dark red at the maximum case count.
+# The na.color argument specifies the color for counties or states with
+# no matching data after the join.
+make_pal <- function(values) {
+  colorNumeric(
+    palette  = colorRampPalette(c("#F5F5F5", "#FADADD", "#F4A0A0",
+                                  "#E05555", "#A61C1C"))(256),
+    domain   = c(0, max(values, 1)),
+    na.color = "#cccccc"
+  )
+}
+
+# A named color vector for the cumulative chart is created using
+# colorRampPalette, which interpolates between two red shades to produce
+# one color per year. The setNames function pairs each color with its
+# corresponding year string so that scale_color_manual in ggplot2 can
+# match colors to the correct year lines.
+year_colors <- setNames(
+  colorRampPalette(c("#E05555", "#4A0A0A"))(length(data_years)),
+  as.character(data_years)
+)
