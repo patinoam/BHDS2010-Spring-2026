@@ -393,6 +393,53 @@ server <- function(input, output){
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
   #####
+  ##### Geographical data reactives
+  #####
+  
+  # The state_geo reactive downloads state boundary shapefiles using the
+  # tigris function states and joins the filtered state case counts onto
+  # the shapefile by matching the Census NAME column to the state column
+  # in the case data. States with no matching case data are assigned zero.
+  # If specific states are selected, unselected states are assigned NA so
+  # they render in the na.color gray defined in make_pal.
+  state_geo <- reactive({
+    sel <- sel_states()
+    geo <- states(cb = TRUE, resolution = "20m", year = 2023) %>%
+      filter(!STUSPS %in% c("AK", "HI", "PR", "GU", "VI", "MP", "AS")) %>%
+      left_join(filtered_state(), by = c("NAME" = "state")) %>%
+      mutate(cases = replace_na(cases, 0))
+    if (length(sel) > 0) {
+      geo <- geo %>%
+        mutate(cases = ifelse(NAME %in% sel, cases, NA_real_))
+    }
+    geo
+  })
+  
+  # The county_geo reactive downloads county boundary shapefiles using the
+  # tigris function counties. If specific states are selected, only counties
+  # belonging to those states are downloaded by passing the corresponding
+  # two-digit FIPS state codes to the state argument of counties. The
+  # filtered county case counts are then joined onto the shapefile using
+  # the five-digit FIPS code. Counties with no matching case data are
+  # assigned zero.
+  county_geo <- reactive({
+    sel <- sel_states()
+    if (length(sel) == 0) {
+      geo <- counties(cb = TRUE, resolution = "20m", year = 2023) %>%
+        filter(!STATEFP %in% c("02", "15", "72", "66", "78", "60", "69"))
+    } else {
+      fp  <- fips_codes %>%
+        filter(state_name %in% sel) %>%
+        pull(state_code) %>%
+        unique()
+      geo <- counties(state = fp, cb = TRUE, year = 2023)
+    }
+    geo %>%
+      left_join(filtered_county(), by = c("GEOID" = "fips")) %>%
+      mutate(cases = replace_na(cases, 0))
+  })
+
+  #####
   ##### Weekly case count plot
   #####
   
