@@ -121,9 +121,20 @@ year_colors <- setNames(
 # page layout. The interface is divided into a sidebar panel containing all
 # input controls and a main panel containing all output components.
 ui <- fluidPage(
-  # TODO Declare inputs:
+  titlePanel("United States Measles Caseload Dashboard"),
   
-  # TODO Declare output components:
+  sidebarLayout(
+    
+    # The sidebar panel contains all input controls. Values selected here
+    # are passed to the server using the inputId of each control.
+    sidebarPanel(
+    ),
+    
+    # The main panel contains all output components. Each output function
+    # below is paired with a corresponding render function in the server.
+    mainPanel(
+    )
+  )
 )
 
 #####
