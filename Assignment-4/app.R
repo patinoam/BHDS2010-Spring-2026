@@ -27,14 +27,20 @@ library(lubridate)
 # generating figures, such as `ggplot`, among others.
 library(tidyverse)
 
+# The tigris option below instructs the package to save downloaded shapefiles
+# to a local cache folder. This prevents re-downloading on each app run.
+options(tigris_use_cache = TRUE)
+
 #####
 ##### Data loading and preparation
 #####
 
-# File paths are handled differently in development mode vs when deployed.
-development_mode <- TRUE
+# File paths are handled differently in developer mode vs when app deployed.
+# If users are testing changes to the app locally, developer mode is set to TRUE.
+# Otherwise, if the app is deployed, developer is set to FALSE.
+developer_mode <- TRUE
 
-if (development_mode) {
+if (developer_mode) {
   wd_path <- getwd()
   data_path <- paste0(wd_path, "/Assignment-4/measles_county_all_updates_detailed.csv")
 } else {
@@ -715,4 +721,4 @@ server <- function(input, output){
 
 # The shinyApp function connects the ui and server objects defined
 # above and launches the application.
-# shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server)
