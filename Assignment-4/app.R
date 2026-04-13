@@ -112,3 +112,35 @@ year_colors <- setNames(
   colorRampPalette(c("#E05555", "#4A0A0A"))(length(data_years)),
   as.character(data_years)
 )
+
+#####
+##### User interface
+#####
+
+# The user interface is defined using fluidPage, which creates a responsive
+# page layout. The interface is divided into a sidebar panel containing all
+# input controls and a main panel containing all output components.
+ui <- fluidPage(
+  # TODO Declare inputs:
+  
+  # TODO Declare output components:
+)
+
+#####
+##### Server
+#####
+
+# The server function contains all reactive logic. It takes input and output
+# as arguments. Input values are read using input$inputId and output values
+# are assigned using output$outputId.
+server <- function(input, output){
+    # TODO Declare output variables:
+}
+
+#####
+##### Launch the shiny app
+#####
+
+# The shinyApp function connects the ui and server objects defined
+# above and launches the application.
+# shinyApp(ui = ui, server = server)
