@@ -128,7 +128,7 @@ ui <- fluidPage(
     # The sidebar panel contains all input controls. Values selected here
     # are passed to the server using the inputId of each control.
     sidebarPanel(
-        
+
       # The radioButtons input allows the user to select one map level.
       # The inputId "map_level" is used in the server to read this value.
       # The choices argument defines the display labels and their
@@ -148,6 +148,18 @@ ui <- fluidPage(
         label    = "Case type",
         choices  = outcome_choices,
         selected = "case_lab-confirmed"
+      ),
+
+      # The dateRangeInput input creates a start and end date selector.
+      # The min and max arguments set the earliest and latest selectable
+      # dates based on the range of dates present in the data.
+      dateRangeInput(
+        inputId = "date_range",
+        label   = "Date range",
+        min     = date_range[1],
+        max     = date_range[2],
+        start   = date_range[1],
+        end     = date_range[2]
       ),
     ),
     
