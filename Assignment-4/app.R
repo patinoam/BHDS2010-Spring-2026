@@ -2,7 +2,7 @@
 wd_path <- getwd()
 data_path <- paste0(wd_path,
                     "/Assignment-4/measles_county_all_updates_detailed.csv")
-                    
+
 #####
 ##### Install and load packages
 #####
@@ -67,3 +67,14 @@ raw <- read.csv(data_path, header=TRUE) %>%
     # This column is used for grouping in the weekly case count chart.
     week = floor_date(date, "week")
   )
+
+# A named character vector of outcome types is created for use in the
+# case type dropdown input. The left side of each pair is the label shown
+# to the user, and the right side is the value stored in the data column.
+outcome_choices <- c(
+  "All cases (lab-confirmed)" = "case_lab-confirmed",
+  "Imported cases"            = "case_imported",
+  "Local transmission"        = "case_local",
+  "Unvaccinated"              = "case_unvaccinated",
+  "Vaccinated"                = "case_vaccinated"
+)
