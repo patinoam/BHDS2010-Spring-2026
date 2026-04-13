@@ -1,8 +1,3 @@
-# TODO remove below when for app deploy; in read.csv, replace path with filename only
-wd_path <- getwd()
-data_path <- paste0(wd_path,
-                    "/Assignment-4/measles_county_all_updates_detailed.csv")
-
 #####
 ##### Install and load packages
 #####
@@ -35,6 +30,16 @@ library(tidyverse)
 #####
 ##### Data loading and preparation
 #####
+
+# File paths are handled differently in development mode vs when deployed.
+development_mode <- TRUE
+
+if (development_mode) {
+  wd_path <- getwd()
+  data_path <- paste0(wd_path, "/Assignment-4/measles_county_all_updates_detailed.csv")
+} else {
+  data_path <- "measles_county_all_updates_detailed.csv"
+}
 
 # The data file is read into the R environment using read_csv from the readr
 # package. An object called raw is created which contains the imported data.
@@ -128,6 +133,8 @@ ui <- fluidPage(
     # The sidebar panel contains all input controls. Values selected here
     # are passed to the server using the inputId of each control.
     sidebarPanel(
+
+      ### Inputs
 
       # The radioButtons input allows the user to select one map level.
       # The inputId "map_level" is used in the server to read this value.
@@ -227,7 +234,7 @@ ui <- fluidPage(
                       div(class = "summary-value", textOutput("box_counties"))
         ))
       ),
-      
+
       # The tags$style function injects CSS into the page to style the
       # summary boxes defined above. Styles are applied by class name.
       tags$style("
@@ -257,6 +264,9 @@ ui <- fluidPage(
           color: #333;
         }
       "),
+
+      ### TODO Outputs
+
     )
   )
 )
