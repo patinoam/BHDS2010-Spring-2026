@@ -69,7 +69,7 @@ raw <- read.csv(data_path, header=TRUE) %>%
     
     # Each date is rounded down to the start of its week using floor_date.
     # For example, a Wednesday date becomes the preceding Sunday.
-    # This column is used for grouping in the weekly case count chart.
+    # This column is used for grouping in the weekly case count plot.
     week = floor_date(date, "week")
   )
 
@@ -90,7 +90,7 @@ outcome_choices <- c(
 date_range <- range(raw$date, na.rm = TRUE)
 
 # The unique calendar years present in the dataset are extracted and sorted.
-# This vector is used to build a color palette for the cumulative chart
+# This vector is used to build a color palette for the cumulative plot
 # that scales automatically if the data spans more than two years.
 data_years <- sort(unique(year(raw$date)))
 
@@ -108,7 +108,7 @@ make_pal <- function(values) {
   )
 }
 
-# A named color vector for the cumulative chart is created using
+# A named color vector for the cumulative plot is created using
 # colorRampPalette, which interpolates between two red shades to produce
 # one color per year. The setNames function pairs each color with its
 # corresponding year string so that scale_color_manual in ggplot2 can
@@ -267,6 +267,11 @@ ui <- fluidPage(
 
       ### Outputs
 
+      # The plotOutput function declares the weekly case count plot.
+      h4("Weekly case counts"),
+      plotOutput("line_plot", height = "260px"),
+      br(),
+
       # The tableOutput function declares the top locations table.
       h4("Top locations"),
       tableOutput("top_table")
@@ -343,6 +348,78 @@ server <- function(input, output){
       summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
+  # The weekly_cases reactive groups the filtered data by week and computes
+  # the total case count per week. The output is used for the weekly line
+  # plot. The data is sorted chronologically so the line draws from left
+  # to right.
+  weekly_cases <- reactive({
+    filtered_raw() %>%
+      group_by(week) %>%
+      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
+      arrange(week)
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
+  #####
+  ##### Weekly case count plot
+  #####
+  
+  # The renderPlot function creates the weekly case count line plot using
+  # ggplot2. The x-axis displays weeks with tick marks placed at the first
+  # week of each calendar month, labeled in the format "Jan '25". The
+  # y-axis displays the case count formatted with comma separators.
+  # A shaded area is drawn beneath the line using geom_area.
+  output$line_plot <- renderPlot({
+    wk  <- weekly_cases()
+    sel <- sel_states()
+    
+    # The subtitle is constructed to reflect the current state filter
+    # selection. If three or fewer states are selected, their names are
+    # listed. If more than three are selected, only the count is shown.
+    subtitle <- if (length(sel) > 0) {
+      if (length(sel) <= 3) {
+        paste("Filtered to:", paste(sel, collapse = ", "))
+      } else {
+        paste0("Filtered to ", length(sel), " states")
+      }
+    } else {
+      "All states"
+    }
+    
+    # The x-axis tick positions are set to the earliest week date falling
+    # within each calendar month. The slice_min function retains only one
+    # row per month group, corresponding to the earliest week in that month.
+    month_breaks <- wk %>%
+      mutate(month = floor_date(week, "month")) %>%
+      group_by(month) %>%
+      slice_min(week, n = 1) %>%
+      pull(week)
+    
+    ggplot(wk, aes(x = week, y = cases)) +
+      geom_area(fill = "#FADADD", alpha = 0.5) +
+      geom_line(color = "#A61C1C", linewidth = 0.9) +
+      geom_point(color = "#A61C1C", size = 1.8) +
+      scale_x_date(
+        breaks       = month_breaks,
+        labels       = function(x) format(x, "%b '%y"),
+        minor_breaks = NULL
+      ) +
+      scale_y_continuous(
+        labels = comma,
+        expand = expansion(mult = c(0, 0.1))
+      ) +
+      labs(x = NULL, y = "Cases", subtitle = subtitle) +
+      theme_minimal(base_size = 13) +
+      theme(
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor   = element_blank(),
+        panel.grid.major.y = element_line(color = "#eeeeee"),
+        plot.subtitle      = element_text(color = "#888888", size = 11),
+        axis.text.x        = element_text(angle = 45, hjust = 1, size = 11),
+        axis.text.y        = element_text(size = 11),
+        plot.margin        = margin(8, 16, 8, 8)
+      )
+  }, res = 110)
+  
   #####
   ##### Top locations table
   #####
