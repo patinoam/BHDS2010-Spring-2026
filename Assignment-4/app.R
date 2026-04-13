@@ -78,3 +78,13 @@ outcome_choices <- c(
   "Unvaccinated"              = "case_unvaccinated",
   "Vaccinated"                = "case_vaccinated"
 )
+
+# The earliest and latest dates in the dataset are stored as a two-element
+# vector. These values are used to set the minimum, maximum, and default
+# values of the date range input in the user interface.
+date_range <- range(raw$date, na.rm = TRUE)
+
+# The unique calendar years present in the dataset are extracted and sorted.
+# This vector is used to build a color palette for the cumulative chart
+# that scales automatically if the data spans more than two years.
+data_years <- sort(unique(year(raw$date)))
