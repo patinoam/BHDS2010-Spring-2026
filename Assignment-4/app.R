@@ -440,6 +440,96 @@ server <- function(input, output){
   })
 
   #####
+  ##### Map output
+  #####
+  
+  # The renderLeaflet function creates the base map once on startup with a
+  # light CartoDB tile layer centered on the contiguous United States.
+  # Subsequent updates to the map polygons are handled by leafletProxy,
+  # which modifies the existing map in place without redrawing it.
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
+      setView(lng = -96, lat = 38, zoom = 4)
+  })
+  
+  # The observe block updates the map polygons and legend whenever the
+  # Update button is clicked or the map level radio button is changed.
+  # The bindEvent function attends to both input$update and input$map_level,
+  # so that switching between state and county view takes effect immediately
+  # without requiring a button click.
+  observe({
+    if (input$map_level == "state") {
+      
+      # For the state map, the color palette is built from non-NA case values
+      # only. Tooltip labels are constructed as HTML strings and converted
+      # using htmltools::HTML so that the bold tags render correctly.
+      geo  <- state_geo()
+      pal  <- make_pal(geo$cases[!is.na(geo$cases)])
+      labs <- sprintf("<strong>%s</strong><br/>%s cases",
+                      geo$NAME,
+                      ifelse(is.na(geo$cases), "Not selected",
+                             comma(geo$cases))) %>%
+        lapply(htmltools::HTML)
+      
+      leafletProxy("map") %>%
+        clearShapes()   %>%
+        clearControls() %>%
+        addPolygons(
+          data         = geo,
+          fillColor    = ~pal(cases),
+          fillOpacity  = 0.8,
+          color        = "#AAAAAA",
+          weight       = 1.5,
+          highlight    = highlightOptions(weight = 2.5, color = "#ff6b35",
+                                          bringToFront = TRUE),
+          label        = labs,
+          labelOptions = labelOptions(style = list("font-size" = "13px"))
+        ) %>%
+        addLegend(
+          pal       = pal,
+          values    = geo$cases[!is.na(geo$cases)],
+          title     = "Total cases",
+          position  = "bottomright",
+          labFormat = labelFormat(big.mark = ",")
+        )
+      
+    } else {
+      
+      # For the county map, the border weight is set to 0.4, which is thinner
+      # than the state border weight of 1.5, to prevent the county grid from
+      # appearing visually dense if zoomed out to view entire country.
+      geo  <- county_geo()
+      pal  <- make_pal(geo$cases)
+      labs <- sprintf("<strong>%s, %s</strong><br/>%s cases",
+                      geo$NAME, geo$state, comma(geo$cases)) %>%
+        lapply(htmltools::HTML)
+      
+      leafletProxy("map") %>%
+        clearShapes()   %>%
+        clearControls() %>%
+        addPolygons(
+          data         = geo,
+          fillColor    = ~pal(cases),
+          fillOpacity  = 0.8,
+          color        = "#AAAAAA",
+          weight       = 0.4,
+          highlight    = highlightOptions(weight = 1.5, color = "#ff6b35",
+                                          bringToFront = TRUE),
+          label        = labs,
+          labelOptions = labelOptions(style = list("font-size" = "12px"))
+        ) %>%
+        addLegend(
+          pal       = pal,
+          values    = geo$cases,
+          title     = "Total cases",
+          position  = "bottomright",
+          labFormat = labelFormat(big.mark = ",")
+        )
+    }
+  }) %>% bindEvent(input$update, input$map_level, ignoreNULL = FALSE)
+
+  #####
   ##### Weekly case count plot
   #####
   
