@@ -200,8 +200,8 @@ ui <- fluidPage(
       br(),
 
       # The actionButton input creates a button labeled Update. All filtered
-      # data reactives in the server are gated on this button, so outputs only 
-      # update when the button is clicked.
+      # data reactives in the server are gated on this button using bindEvent,
+      # so outputs only update when the button is clicked.
       actionButton(
         inputId = "update",
         label   = "Update",
@@ -293,6 +293,31 @@ server <- function(input, output){
   sel_states <- reactive({
     input$state_filter[input$state_filter != "ALL"]
   })
+
+  #####
+  ##### Filtered data reactives
+  #####
+  
+  # The filtered_raw reactive applies the outcome type, date range, and state
+  # filters to the raw dataset. It returns a filtered data frame and serves
+  # as the input to all downstream summary reactives.
+  # The bindEvent function gates execution on input$update, so this reactive
+  # only re-runs when the Update button is clicked. The ignoreNULL = FALSE
+  # argument allows the reactive to run once on startup before any click.
+  filtered_raw <- reactive({
+    d <- raw %>%
+      filter(
+        outcome_type == input$outcome,
+        date >= input$date_range[1],
+        date <= input$date_range[2]
+      )
+    # If one or more specific states are selected, the data is further
+    # filtered to include only rows matching those states.
+    if (length(sel_states()) > 0) {
+      d <- d %>% filter(state %in% sel_states())
+    }
+    d
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 }
 
 #####
