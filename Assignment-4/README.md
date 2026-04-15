@@ -9,8 +9,8 @@ we will employ RStudio to analyze and display our data via regressive coding
 ## Direct Objective of Data
 The dataset measles_county_all_updates_detailed.csv records the number of 
 measles cases in the United States from January 1, 2025 until April 9, 2026. The 
-information is specifies the county in which each case occurred, subject's 
-vaccination status, and age range of the infected individual.
+information specifies the state and county in which each case occurred, as well as 
+subject's vaccination status.
 
 ## Team Members and Roles
 Angelica:
@@ -22,7 +22,7 @@ Jess: README documentation
 
 ## Instructions to Run the Code
 1. Clone or download this GitHub repository onto your local computer
-2. Opent he project folder in RStudio (clone/download our GitHub repository onto
+2. Open the project folder in RStudio (clone/download our GitHub repository onto
 your local computer using File -> New Project -> Version Control -> Git, then paste
 the repository URL git clone https://github.com/patinoam/BHDS2010-Spring-2026.git
 4. Ensure that the file measles_county_all_updates_detailed.csv is located in
