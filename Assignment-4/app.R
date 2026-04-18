@@ -667,6 +667,66 @@ server <- function(input, output){
 
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
+  ### County summary table reactive
+
+  county_summary_data <- reactive({
+
+    # Part A: Descriptive statistics for the selected outcome type.
+    # Each row in filtered_raw() is one county on one date. Statistics are
+    # computed across reporting periods within each county. "Mean" addresses
+    # the question: on an average reporting day, how many cases did this 
+    # county report?
+    stats_a <- filtered_raw() %>%
+      group_by(state, county) %>%
+      summarize(
+        `Total Count`       = sum(value,    na.rm = TRUE),
+        .min                = min(value,    na.rm = TRUE),
+        .max                = max(value,    na.rm = TRUE),
+        Mean                = round(mean(value,   na.rm = TRUE), 2),
+        `Std Dev`           = round(sd(value,     na.rm = TRUE), 2),
+        Median              = round(median(value, na.rm = TRUE), 2),
+        IQR                 = round(IQR(value,    na.rm = TRUE), 2),
+        `Affected Counties` = as.integer(sum(value, na.rm = TRUE) > 0),
+        .groups = "drop"
+      ) %>%
+      mutate(Range = paste0("[", .min, ", ", .max, "]")) %>%
+      select(-c(.min, .max))
+
+    # Identify top N states and top N counties per state
+    top_states <- stats_a %>%
+      group_by(state) %>%
+      summarize(state_total = sum(`Total Count`, na.rm = TRUE),
+                .groups = "drop") %>%
+      arrange(desc(state_total)) %>%
+      slice_head(n = input$top_n_states) %>%
+      pull(state)
+
+    stats_a <- stats_a %>%
+      filter(state %in% top_states) %>%
+      group_by(state) %>%
+      slice_max(`Total Count`, n = input$top_n_counties, with_ties = FALSE) %>%
+      ungroup()
+
+    # Part B: Proportion and rate columns (all outcome types).
+    # Same helper as the state reactive, but grouped by state and county.
+    stats_b <- build_outcome_wide(raw,
+                                  date_start = input$date_range[1],
+                                  date_end   = input$date_range[2],
+                                  states     = sel_states(),
+                                  group_cols = c("state", "county"))
+
+    # Join and enforce top-state ordering
+    stats_a %>%
+      left_join(stats_b, by = c("state", "county")) %>%
+      mutate(state = factor(state, levels = top_states)) %>%
+      arrange(state, desc(`Total Count`)) %>%
+      mutate(state = as.character(state)) %>%
+      select(State = state, County = county, `Total Count`, Range,
+              Mean, `Std Dev`, Median, IQR, `Prop Imported`, `Prop Local`,
+              `IRR`, `Affected Counties`)
+
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
   #####
   ##### Upper panel outputs: summary boxes
   #####
