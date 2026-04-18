@@ -587,6 +587,54 @@ server <- function(input, output){
       mutate(cases = replace_na(cases, 0))
   })
 
+  ### State summary table reactive
+
+  state_summary_data <- reactive({
+
+    # Part A: Descriptive statistics for the selected outcome type.
+    # Summarize at county level first (one row per county), then roll up
+    # to state level. "Mean" addresses the question: on average, how many 
+    # cases did an affected county in this state report?
+    county_level <- filtered_raw() %>%
+      group_by(state, fips, county) %>%
+      summarize(cases = sum(value, na.rm = TRUE), .groups = "drop")
+
+    stats_a <- county_level %>%
+      group_by(state) %>%
+      summarize(
+        `Total Count`       = sum(cases,    na.rm = TRUE),
+        .min                = min(cases,    na.rm = TRUE),
+        .max                = max(cases,    na.rm = TRUE),
+        Mean                = round(mean(cases,   na.rm = TRUE), 2),
+        `Std Dev`           = round(sd(cases,     na.rm = TRUE), 2),
+        Median              = round(median(cases, na.rm = TRUE), 2),
+        IQR                 = round(IQR(cases,    na.rm = TRUE), 2),
+        `Affected Counties` = sum(cases > 0, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      mutate(Range = paste0("[", .min, ", ", .max, "]")) %>%
+      select(-c(.min, .max))
+
+    # Part B: Proportion and rate columns (all outcome types).
+    # build_outcome_wide applies only date and state filters, pivots outcome
+    # types wide, and computes Prop Imported, Prop Local, and IRR.
+    stats_b <- build_outcome_wide(raw,
+                                  date_start = input$date_range[1],
+                                  date_end   = input$date_range[2],
+                                  states     = sel_states(),
+                                  group_cols = "state")
+
+    # Join and keep top N states by total count
+    stats_a %>%
+      left_join(stats_b, by = "state") %>%
+      arrange(desc(`Total Count`)) %>%
+      slice_head(n = input$top_n_states) %>%
+      select(State = state, `Total Count`, Range, Mean, `Std Dev`,
+              Median, IQR, `Prop Imported`, `Prop Local`, `IRR`,
+              `Affected Counties`)
+
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+
   #####
   ##### Upper panel outputs: summary boxes
   #####
