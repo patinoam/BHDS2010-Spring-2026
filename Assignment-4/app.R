@@ -135,7 +135,7 @@ year_colors <- setNames(
 # page layout. The interface is divided into a sidebar panel containing all
 # input controls and a main panel containing all output components.
 ui <- fluidPage(
-  titlePanel("United States Measles Caseload Dashboard"),
+  titlePanel("United States Measles Surveillance Dashboard"),
   
   sidebarLayout(
     
