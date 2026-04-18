@@ -41,7 +41,7 @@ options(tigris_use_cache = TRUE)
 # File paths are handled differently in developer mode vs when app is deployed.
 # If users are testing changes to the app locally, developer mode is set to TRUE.
 # Otherwise, if the app is deployed, developer is set to FALSE.
-developer_mode <- TRUE
+developer_mode <- FALSE
 
 if (developer_mode) {
   wd_path <- getwd()
