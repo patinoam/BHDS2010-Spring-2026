@@ -133,6 +133,29 @@ year_colors <- setNames(
   as.character(data_years)
 )
 
+### Data filter
+
+# This function applies the date range and optional state filter to any 
+# data frame that has "date" and "state" columns.  It is called inside the 
+# reactives below.
+# Inputs include:
+#   df         — the data frame to filter (usually raw or a subset of it)
+#   date_start — earliest date to keep  (from input$date_range[1])
+#   date_end   — latest date to keep    (from input$date_range[2])
+#   states     — character vector of selected state names, or an empty
+#                vector (length 0) meaning "keep all states"
+filter_by_date_state <- function(df, date_start, date_end, states) {
+  # Step 1: always apply the date range filter
+  out <- df %>%
+    filter(date >= date_start, date <= date_end)
+  # Step 2: only apply the state filter when specific states were chosen.
+  # If states is empty (length 0), every state is retained.
+  if (length(states) > 0) {
+    out <- out %>% filter(state %in% states)
+  }
+  out
+}
+
 ### Table setup
 
 # This function guarantees a set of required column names exist in a data 
@@ -414,8 +437,10 @@ ui <- fluidPage(
 server <- function(input, output){
 
   #####
-  ##### Helper reactive
+  ##### Reactives
   #####
+  
+  ### Helper reactives
   
   # A helper reactive called sel_states is defined to return the vector of
   # selected state names with the sentinel value "ALL" removed. This reactive
@@ -427,9 +452,7 @@ server <- function(input, output){
     input$state_filter[input$state_filter != "ALL"]
   })
 
-  #####
-  ##### Filtered data reactives
-  #####
+  ### Filtered data reactives
   
   # The filtered_raw reactive applies the outcome type, date range, and state
   # filters to the raw dataset. It returns a filtered data frame and serves
@@ -438,18 +461,13 @@ server <- function(input, output){
   # only re-runs when the Update button is clicked. The ignoreNULL = FALSE
   # argument allows the reactive to run once on startup before any click.
   filtered_raw <- reactive({
-    d <- raw %>%
-      filter(
-        outcome_type == input$outcome,
-        date >= input$date_range[1],
-        date <= input$date_range[2]
-      )
-    # If one or more specific states are selected, the data is further
-    # filtered to include only rows matching those states.
-    if (length(sel_states()) > 0) {
-      d <- d %>% filter(state %in% sel_states())
-    }
-    d
+    # Apply the date and state filters using the helper, then
+    # keep only the outcome type the user selected in the dropdown.
+    filter_by_date_state(raw,
+                         date_start = input$date_range[1],
+                         date_end   = input$date_range[2],
+                         states     = sel_states()) %>%
+      filter(outcome_type == input$outcome)
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
   # The filtered_county reactive groups the filtered data by county and
@@ -505,9 +523,7 @@ server <- function(input, output){
       mutate(year = as.factor(year))
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
-  #####
-  ##### Geographical data reactives
-  #####
+  ### Geographical data reactives
   
   # The state_geo reactive downloads state boundary shapefiles using the
   # tigris function states and joins the filtered state case counts onto
@@ -553,8 +569,41 @@ server <- function(input, output){
   })
 
   #####
-  ##### Map output
+  ##### Upper panel outputs: summary boxes
   #####
+  
+  # The total cases output sums all values in the value column of the
+  # filtered raw data. The comma function from the scales package formats
+  # the result with comma separators.
+  output$box_total <- renderText({
+    comma(sum(filtered_raw()$value, na.rm = TRUE))
+  })
+  
+  # The date range output formats the selected start and end dates as
+  # month, day, and year strings separated by an em dash.
+  output$box_dates <- renderText({
+    paste0(format(input$date_range[1], "%b %d, %Y"),
+           " - ",
+           format(input$date_range[2], "%b %d, %Y"))
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+  
+  # The state count output returns the number of distinct states present
+  # in the filtered state summary data.
+  output$box_states <- renderText({
+    n_distinct(filtered_state()$state)
+  })
+  
+  # The county count output returns the number of counties in the filtered
+  # county summary data that have at least one reported case.
+  output$box_counties <- renderText({
+    filtered_county() %>% filter(cases > 0) %>% nrow()
+  })
+
+  #####
+  ##### Overview tab outputs
+  #####
+
+  ### Interactive map
   
   # The renderLeaflet function creates the base map once on startup with a
   # light CartoDB tile layer centered on the contiguous United States.
@@ -642,9 +691,7 @@ server <- function(input, output){
     }
   }) %>% bindEvent(input$update, input$map_level, ignoreNULL = FALSE)
 
-  #####
-  ##### Weekly case count plot
-  #####
+  ### Weekly case count plot
   
   # The renderPlot function creates the weekly case count line plot using
   # ggplot2. The x-axis displays weeks with tick marks placed at the first
@@ -703,9 +750,7 @@ server <- function(input, output){
       )
   }, res = 110)
   
-  #####
-  ##### Cumulative cases by year chart
-  #####
+  ### Cumulative cases by year chart
   
   # The renderPlot function creates the cumulative cases by year chart using
   # ggplot2. Each calendar year is drawn as a separate line. The x-axis
@@ -763,40 +808,7 @@ server <- function(input, output){
       )
   }, res = 110)
 
-  #####
-  ##### Summary box outputs
-  #####
-  
-  # The total cases output sums all values in the value column of the
-  # filtered raw data. The comma function from the scales package formats
-  # the result with comma separators.
-  output$box_total <- renderText({
-    comma(sum(filtered_raw()$value, na.rm = TRUE))
-  })
-  
-  # The date range output formats the selected start and end dates as
-  # month, day, and year strings separated by an em dash.
-  output$box_dates <- renderText({
-    paste0(format(input$date_range[1], "%b %d, %Y"),
-           " - ",
-           format(input$date_range[2], "%b %d, %Y"))
-  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
-  
-  # The state count output returns the number of distinct states present
-  # in the filtered state summary data.
-  output$box_states <- renderText({
-    n_distinct(filtered_state()$state)
-  })
-  
-  # The county count output returns the number of counties in the filtered
-  # county summary data that have at least one reported case.
-  output$box_counties <- renderText({
-    filtered_county() %>% filter(cases > 0) %>% nrow()
-  })
-
-  #####
-  ##### Top locations table
-  #####
+  ### Top locations table
   
   # The renderTable function creates the top locations table. The table
   # displays the ten locations with the highest case counts under the
