@@ -871,7 +871,7 @@ server <- function(input, output){
                             "case_unvaccinated"))
 
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
-  
+
   #####
   ##### Upper panel outputs: summary boxes
   #####
@@ -1204,6 +1204,74 @@ server <- function(input, output){
       )
   })
  
+  #####
+  ##### Correlation analysis tab outputs: plots and tables
+  #####
+
+  # Figure 1: Imported cases vs. Local transmission.
+  # The renderPlot function builds the scatter plot for Figure 1.
+  # The entire body is wrapped in tryCatch so that if the filtered data
+  # lacks sufficient variance (e.g., all-zero columns after a narrow filter),
+  # the plot area shows a readable message instead of a red error screen.
+  output$corr_plot_imp_local <- renderPlot({
+    tryCatch({
+      df <- corr_data()
+      build_corr_plot(
+        df    = df,
+        x_col = "case_imported",
+        y_col = "case_local",
+        x_lab = "Imported cases \n(county total)",
+        y_lab = "Local transmission cases \n(county total)"
+      )
+    }, error = function(e) {
+      # Display a plain-text message if the plot cannot be generated.
+      # This happens when there is not enough data variation after filtering.
+      ggplot() +
+        annotate("text", x = 0.5, y = 0.5,
+                 label = paste("Insufficient data to generate this figure.",
+                               "\nTry expanding the date range or state filter."),
+                 size = 5, color = "#888888", hjust = 0.5, vjust = 0.5) +
+        theme_void()
+    })
+  }, res = 110)
+
+  # The renderTable function builds the summary statistics table for
+  # Figure 1. digits = 3 limits decimal places for numeric columns.
+  output$corr_table_imp_local <- renderTable({
+    df <- corr_data()
+    build_corr_table(df$case_imported, df$case_local)
+  }, digits = 3)
+
+  # Figure 2: Unvaccinated cases vs. Local transmission.
+  # The renderPlot function builds the scatter plot for Figure 2.
+  # The entire body is wrapped in tryCatch for the same reason as Figure 1.
+  output$corr_plot_unvacc_local <- renderPlot({
+    tryCatch({
+      df <- corr_data()
+      build_corr_plot(
+        df    = df,
+        x_col = "case_unvaccinated",
+        y_col = "case_local",
+        x_lab = "Unvaccinated cases \n(county total)",
+        y_lab = "Local transmission cases \n(county total)"
+      )
+    }, error = function(e) {
+      # Display a plain-text message if the plot cannot be generated.
+      ggplot() +
+        annotate("text", x = 0.5, y = 0.5,
+                 label = paste("Insufficient data to generate this figure.",
+                               "\nTry expanding the date range or state filter."),
+                 size = 5, color = "#888888", hjust = 0.5, vjust = 0.5) +
+        theme_void()
+    })
+  }, res = 110)
+
+  # The renderTable function builds the summary statistics table for
+  # Figure 2.
+  output$corr_table_unvacc_local <- renderTable({
+    df <- corr_data()
+    build_corr_table(df$case_unvaccinated, df$case_local)
+  }, digits = 3)
 }
 
 #####
