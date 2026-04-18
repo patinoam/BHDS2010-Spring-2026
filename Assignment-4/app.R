@@ -212,6 +212,19 @@ ui <- fluidPage(
         )
       ),
 
+      # The sliderInput below allows the user choose how many states appear
+      # in the top locations table on the Overview tab and the State Summary
+      # and County Summary tables. The value is read as input$top_n_states
+      # in the server. The range is 1 to 10, defaulting to 5.
+      sliderInput(
+        inputId = "top_n_states",
+        label   = "Top number of states",
+        min     = 1,
+        max     = 10,
+        value   = 5,
+        step    = 1
+      ),
+
       br(),
 
       # The actionButton input creates a button labeled Update. All filtered
