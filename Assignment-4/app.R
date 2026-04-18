@@ -103,6 +103,12 @@ date_range <- range(raw$date, na.rm = TRUE)
 # that scales automatically if the data spans more than two years.
 data_years <- sort(unique(year(raw$date)))
 
+#####
+##### Plain (non-reactive) helper functions
+#####
+
+### Color palette
+
 # A color palette function for the map is defined. It accepts a vector of
 # case count values and returns a leaflet-compatible color scale ranging
 # from light gray at zero cases to dark red at the maximum case count.
