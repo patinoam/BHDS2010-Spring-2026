@@ -303,6 +303,19 @@ ui <- fluidPage(
         step    = 1
       ),
 
+      # The sliderInput below allows the user choose how many counties per
+      # state appear in the County Summary table. The value is read as
+      # input$top_n_counties in the server. The range is 1 to 5,
+      # defaulting to 3.
+      sliderInput(
+        inputId = "top_n_counties",
+        label   = "Top number of counties (per state)",
+        min     = 1,
+        max     = 5,
+        value   = 3,
+        step    = 1
+      ),
+
       br(),
 
       # The actionButton input creates a button labeled Update. All filtered
