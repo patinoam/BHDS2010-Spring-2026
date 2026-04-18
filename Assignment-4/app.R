@@ -874,6 +874,51 @@ server <- function(input, output){
         select(Location, `Total cases` = cases)
     }
   }, digits = 0, format.args = list(big.mark = ","))
+
+  #####
+  ##### State summary tab table output
+  #####
+
+  # The renderDataTable function creates the interactive per-state statistics
+  # table on the State Summary tab. DT::renderDataTable is called explicitly
+  # to use the DT package version (which supports column formatting options)
+  # rather than the base Shiny version.
+  output$state_summary_table <- DT::renderDataTable({
+
+    df <- state_summary_data()
+
+    # The datatable function from DT creates an interactive HTML table with
+    # built-in search, sort, and pagination controls. The options argument
+    # suppresses the row count selector (pageLength = 10 shows all rows
+    # since we cap at 10 states) and centers the table on the page.
+    DT::datatable(
+      df,
+      rownames = FALSE,
+      options  = list(
+        pageLength = 10,     # Show all rows without pagination controls
+        dom        = "t",    # "t" means show only the table, no search bar
+        scrollX    = TRUE    # Allow horizontal scroll for wide tables
+      )
+    ) %>%
+      # Format Total Count and Affected Counties as integers with commas.
+      DT::formatCurrency(
+        columns  = c("Total Count", "Affected Counties"),
+        currency = "",
+        digits   = 0,
+        mark     = ","
+      ) %>%
+      # Format Mean, Std Dev, Median, and IQR to two decimal places.
+      DT::formatRound(
+        columns = c("Mean", "Std Dev", "Median", "IQR"),
+        digits  = 2
+      ) %>%
+      # Format proportion and IRR columns to three decimal places.
+      # NA values (e.g., division by zero) will display as a dash.
+      DT::formatRound(
+        columns = c("Prop Imported", "Prop Local", "IRR"),
+        digits  = 3
+      )
+  })
  
 }
 
