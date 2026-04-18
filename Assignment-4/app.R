@@ -549,7 +549,6 @@ ui <- fluidPage(
           # (rho, p-value, n) for the unvaccinated vs. local correlation.
           tableOutput("corr_table_unvacc_local")
         )
-
       )
     )
   )
@@ -823,6 +822,56 @@ server <- function(input, output){
 
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
+  ### Correlation data reactive
+
+  # The corr_data reactive prepares the county-level data used by both
+  # Spearman correlation figures on the Correlation Analysis tab.
+  # It is gated on input$update like all other filtered reactives so
+  # all tabs update at the same time when the user clicks Update.
+  
+  # The unit of observation is one county. For each county we compute
+  # the total case count for three specific outcome types over the
+  # selected date range:
+  #   case_imported    — imported cases
+  #   case_local       — local transmission cases
+  #   case_unvaccinated — cases in unvaccinated individuals
+  
+  # We do not filter by input$outcome here because the correlations
+  # always compare fixed pairs of outcome types, regardless of what the
+  # user has selected in the Case Type dropdown.
+  corr_data <- reactive({
+
+    # Start from raw data and apply only the date and state filters using the
+    # helper function. We do not filter by outcome type here because the
+    # correlations always compare fixed pairs of outcome types, regardless
+    # of what the user selected in the Case Type dropdown.
+    d <- filter_by_date_state(raw,
+                               date_start = input$date_range[1],
+                               date_end   = input$date_range[2],
+                               states     = sel_states()) %>%
+      filter(
+        # Keep only the three outcome types needed for both correlations.
+        # This reduces the data size before the group-by step below.
+        outcome_type %in% c("case_imported", "case_local",
+                            "case_unvaccinated")
+      )
+
+    # Aggregate to county-level totals, then pivot so each outcome type
+    # becomes its own column. This gives one row per county with columns
+    # case_imported, case_local, and case_unvaccinated.
+    d %>%
+      group_by(state, county, outcome_type) %>%
+      summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+      pivot_wider(names_from = outcome_type, values_from = total,
+                  values_fill = 0) %>%
+      # Use ensure_outcome_cols() to guarantee all three required
+      # columns are present even if a narrow filter produces no rows for
+      # one of the outcome types.
+      ensure_outcome_cols(c("case_imported", "case_local",
+                            "case_unvaccinated"))
+
+  }) %>% bindEvent(input$update, ignoreNULL = FALSE)
+  
   #####
   ##### Upper panel outputs: summary boxes
   #####
