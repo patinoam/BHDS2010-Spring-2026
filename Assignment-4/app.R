@@ -417,7 +417,7 @@ ui <- fluidPage(
         tableOutput("top_table")
         ),
 
-                # The State Summary tab contains the per-state statistics table.
+        # The State Summary tab contains the per-state statistics table.
         tabPanel(
           "State Summary",
           br(),
@@ -433,6 +433,25 @@ ui <- fluidPage(
           # table. The outputId "state_summary_table" is matched to a
           # renderDataTable call in the server.
           dataTableOutput("state_summary_table")
+        ),
+
+        # The County Summary tab contains the per-county statistics table.
+        tabPanel(
+          "County Summary",
+          br(),
+
+          # A brief description for the table.
+          p("Summary statistics for the top counties (by total case count)
+            within each of the top states, based on the selected filters.
+            The number of states and counties shown is controlled by the
+            Top States and Top Counties sliders in the sidebar. Proportion
+            and rate columns use all case types regardless of the Case
+            Type filter."),
+
+          # The dataTableOutput function declares the interactive county
+          # summary table. The outputId "county_summary_table" is matched
+          # to a renderDataTable call in the server.
+          dataTableOutput("county_summary_table")
         ),
 
       )
