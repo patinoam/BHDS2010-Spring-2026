@@ -513,6 +513,43 @@ ui <- fluidPage(
           dataTableOutput("county_summary_table")
         ),
 
+        # The Correlation Analysis tab has Spearman correlation figures and tables.
+        tabPanel(
+          "Correlation Analysis",
+          br(),
+
+          # A brief description explaining what the tab shows and how the
+          # unit of observation (county-level totals) is derived.
+          # Both correlations use the same date and state filters as the
+          # other tabs. The Case Type filter not used, as specific case types 
+          # are specified per figure instead (imported, local, unvaccinated).
+          p("Spearman rank correlations between the specified case types, 
+            computed at the county level using total counts over the selected 
+            date range and state filter. Note that case types are fixed by the 
+            correlation being examined."),
+
+          # The plotOutput function declares the scatter plot for the
+          # imported vs. local correlation.
+          h4("Figure 1: Imported cases vs. local transmission cases"),
+          plotOutput("corr_plot_imp_local", height = "340px"),
+          br(),
+
+          # The tableOutput function declares the summary statistics table
+          # (rho, p-value, n) for the imported vs. local correlation.
+          tableOutput("corr_table_imp_local"),
+          br(),
+
+          # The plotOutput function declares the scatter plot for the
+          # unvaccinated vs. local correlation.
+          h4("Figure 2: Unvaccinated cases vs. local transmission cases"),
+          plotOutput("corr_plot_unvacc_local", height = "340px"),
+          br(),
+
+          # The tableOutput function declares the summary statistics table
+          # (rho, p-value, n) for the unvaccinated vs. local correlation.
+          tableOutput("corr_table_unvacc_local")
+        )
+
       )
     )
   )
