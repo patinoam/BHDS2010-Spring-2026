@@ -231,6 +231,7 @@ ui <- fluidPage(
 
       # Four summary boxes are arranged in a single row using fluidRow and
       # column. Each box displays a label and a text output value.
+      # These boxes sit above the tabs so they are always visible.
       fluidRow(
         column(3, div(class = "summary-box",
                       div(class = "summary-label", "Total Cases"),
@@ -282,26 +283,36 @@ ui <- fluidPage(
 
       ### Outputs
 
-      # The leafletOutput function declares the map output component.
-      # The outputId "map" is used in the server to render and update
-      # the map. Width is set to 100% and height to 480 pixels.
-      leafletOutput("map", width = "100%", height = "480px"),
-      br(),
+      # The tabsetPanel function creates a tab layout. Each tabPanel
+      # defines one tab. Tabs share the sidebar filter controls above.
+      tabsetPanel(
 
-      # The plotOutput function declares the weekly case count plot.
-      h4("Weekly case counts"),
-      plotOutput("line_plot", height = "260px"),
-      br(),
+        # The Overview tab contains the map, case count figures, and top locations table.
+        tabPanel(
+          "Overview",
+          br(),
 
-    # The plotOutput function declares the cumulative cases by year chart.
-      h4("Cumulative cases by year"),
-      plotOutput("cumulative_plot", height = "260px"),
-      br(),
+        # The leafletOutput function declares the map output component.
+        # The outputId "map" is used in the server to render and update
+        # the map. Width is set to 100% and height to 480 pixels.
+        leafletOutput("map", width = "100%", height = "480px"),
+        br(),
 
-      # The tableOutput function declares the top locations table.
-      h4("Top locations"),
-      tableOutput("top_table")
+        # The plotOutput function declares the weekly case count plot.
+        h4("Weekly case counts"),
+        plotOutput("line_plot", height = "260px"),
+        br(),
 
+      # The plotOutput function declares the cumulative cases by year chart.
+        h4("Cumulative cases by year"),
+        plotOutput("cumulative_plot", height = "260px"),
+        br(),
+
+        # The tableOutput function declares the top locations table.
+        h4("Top locations"),
+        tableOutput("top_table")
+        ),
+      )
     )
   )
 )
