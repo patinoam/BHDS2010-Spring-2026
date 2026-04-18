@@ -325,6 +325,25 @@ ui <- fluidPage(
         h4("Top locations"),
         tableOutput("top_table")
         ),
+
+                # The State Summary tab contains the per-state statistics table.
+        tabPanel(
+          "State Summary",
+          br(),
+
+          # A brief description for the table.
+          p("Summary statistics for the top states by total case count,
+            based on the selected filters. The number of states shown is
+            controlled by the Top States slider in the sidebar. Proportion
+            and rate columns use all case types regardless of the Case
+            Type filter."),
+
+          # The dataTableOutput function declares the interactive summary
+          # table. The outputId "state_summary_table" is matched to a
+          # renderDataTable call in the server.
+          dataTableOutput("state_summary_table")
+        ),
+        
       )
     )
   )
