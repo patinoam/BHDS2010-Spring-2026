@@ -5,7 +5,7 @@
 # The lines below are run if the packages were not yet installed.
 # Otherwise,they are commented out so the code is not executed.
 # install.packages(c(
-#   "shiny", "leaflet", "tigris", "sf", "scales", "lubridate", "tidyverse"
+#   "shiny", "leaflet", "tigris", "sf", "scales", "lubridate", "tidyverse", "DT"
 # ))
 
 # The shiny package is used to build the interactive web application.
@@ -26,6 +26,9 @@ library(lubridate)
 # The tidyverse package contains functions for data wrangling and 
 # generating figures, such as `ggplot`, among others.
 library(tidyverse)
+# The DT package provides the dataTableOutput and renderDataTable functions
+# used to display the interactive summary tables.
+library(DT)
 
 # The tigris option below instructs the package to save downloaded shapefiles
 # to a local cache folder. This prevents re-downloading on each app run.
