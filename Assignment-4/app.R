@@ -133,6 +133,61 @@ year_colors <- setNames(
   as.character(data_years)
 )
 
+### Table setup
+
+# This function guarantees a set of required column names exist in a data 
+# frame. It is called after pivot_wider in any block that needs case_imported, 
+# case_local, etc., because pivot_wider only creates columns that are present 
+# in the data. If a filtered subset happens to have no rows for a given outcome 
+# type, that outcome column would be missing entirely — adding it as a zero
+# column prevents downstream division errors.
+# Inputs include:
+#   df   — the data frame to check and modify
+#   cols — a character vector of column names that must exist
+# It returns the data frame with any missing columns added as zero.
+ensure_outcome_cols <- function(df, cols) {
+  for (col in cols) {
+    if (!col %in% names(df)) df[[col]] <- 0
+  }
+  df
+}
+
+# This function adds Prop Imported, Prop Local, and IRR columns to any 
+# data frame that already has case_imported, case_local, case_unvaccinated, 
+# and case_vaccinated columns (i.e., after pivot_wider). NaN and Inf are
+# replaced with NA so the table displays a dash instead of a number.
+add_proportion_cols <- function(df) {
+  df %>%
+    mutate(
+      `Prop Imported` = round(case_imported / (case_imported + case_local), 3),
+      `Prop Imported` = ifelse(is.nan(`Prop Imported`), NA, `Prop Imported`),
+      `Prop Local`    = round(case_local    / (case_imported + case_local), 3),
+      `Prop Local`    = ifelse(is.nan(`Prop Local`),    NA, `Prop Local`),
+      `IRR`           = round(case_unvaccinated / case_vaccinated, 3),
+      `IRR`           = ifelse(is.nan(`IRR`) | is.infinite(`IRR`), NA, `IRR`)
+    )
+}
+
+# This function builds the Part B proportion/rate data frame used by both 
+# summary reactives. It filters raw to the selected date range and states, 
+# then pivots outcome types wide and computes proportion and IRR columns.
+# group_cols — character vector of grouping columns before outcome_type,
+#              e.g. "state" for state-level or c("state", "county") for
+#              county-level. The same vector is used in the final select
+#              so the returned data frame has exactly those ID columns
+#              plus Prop Imported, Prop Local, and IRR.
+build_outcome_wide <- function(raw, date_start, date_end, states, group_cols) {
+  filter_by_date_state(raw, date_start, date_end, states) %>%
+    group_by(across(all_of(c(group_cols, "outcome_type")))) %>%
+    summarize(total = sum(value, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from  = outcome_type, values_from = total,
+                values_fill = 0) %>%
+    ensure_outcome_cols(c("case_imported", "case_local",
+                          "case_unvaccinated", "case_vaccinated")) %>%
+    add_proportion_cols() %>%
+    select(all_of(group_cols), `Prop Imported`, `Prop Local`, `IRR`)
+}
+
 #####
 ##### User interface
 #####
@@ -343,7 +398,7 @@ ui <- fluidPage(
           # renderDataTable call in the server.
           dataTableOutput("state_summary_table")
         ),
-        
+
       )
     )
   )
