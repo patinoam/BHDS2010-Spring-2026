@@ -452,6 +452,25 @@ server <- function(input, output){
     input$state_filter[input$state_filter != "ALL"]
   })
 
+  # A helper reactive called plot_subtitle builds the subtitle string
+  # used on both the weekly case count and cumulative cases plots. It is
+  # defined once here so the same logic does not need to be repeated inside
+  # each renderPlot call below.
+  # Logic:
+  #   - If no specific states are selected, return "All states".
+  #   - If 1–3 states are selected, list their names after a colon.
+  #   - If 4 or more states are selected, show only the count to save space.
+  plot_subtitle <- reactive({
+    sel <- sel_states()
+    if (length(sel) == 0) {
+      "All states"
+    } else if (length(sel) <= 3) {
+      paste("Filtered to:", paste(sel, collapse = ", "))
+    } else {
+      paste0("Filtered to ", length(sel), " states")
+    }
+  })
+
   ### Filtered data reactives
   
   # The filtered_raw reactive applies the outcome type, date range, and state
@@ -700,20 +719,6 @@ server <- function(input, output){
   # A shaded area is drawn beneath the line using geom_area.
   output$line_plot <- renderPlot({
     wk  <- weekly_cases()
-    sel <- sel_states()
-    
-    # The subtitle is constructed to reflect the current state filter
-    # selection. If three or fewer states are selected, their names are
-    # listed. If more than three are selected, only the count is shown.
-    subtitle <- if (length(sel) > 0) {
-      if (length(sel) <= 3) {
-        paste("Filtered to:", paste(sel, collapse = ", "))
-      } else {
-        paste0("Filtered to ", length(sel), " states")
-      }
-    } else {
-      "All states"
-    }
     
     # The x-axis tick positions are set to the earliest week date falling
     # within each calendar month. The slice_min function retains only one
@@ -737,7 +742,7 @@ server <- function(input, output){
         labels = comma,
         expand = expansion(mult = c(0, 0.1))
       ) +
-      labs(x = NULL, y = "Cases", subtitle = subtitle) +
+      labs(x = NULL, y = "Cases", subtitle = plot_subtitle()) +
       theme_minimal(base_size = 13) +
       theme(
         panel.grid.major.x = element_blank(),
@@ -759,19 +764,6 @@ server <- function(input, output){
   # The year_colors vector defined at startup maps each year to a red shade.
   output$cumulative_plot <- renderPlot({
     cum <- cumulative_cases()
-    sel <- sel_states()
-    
-    # The subtitle is constructed using the same logic as the weekly chart
-    # to maintain consistency across figures.
-    subtitle <- if (length(sel) > 0) {
-      if (length(sel) <= 3) {
-        paste("Filtered to:", paste(sel, collapse = ", "))
-      } else {
-        paste0("Filtered to ", length(sel), " states")
-      }
-    } else {
-      "All states"
-    }
     
     # The x-axis tick marks are set to integers 1 through 12 corresponding
     # to each calendar month. The built-in R constant month.abb provides
@@ -793,7 +785,7 @@ server <- function(input, output){
         x        = NULL,
         y        = "Cumulative cases",
         color    = "Year",
-        subtitle = subtitle
+        subtitle = plot_subtitle()
       ) +
       theme_minimal(base_size = 13) +
       theme(
