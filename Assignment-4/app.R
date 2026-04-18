@@ -211,6 +211,65 @@ build_outcome_wide <- function(raw, date_start, date_end, states, group_cols) {
     select(all_of(group_cols), `Prop Imported`, `Prop Local`, `IRR`)
 }
 
+### Correlation plot and table
+
+# This function is for generating the scatter plots. 
+# Inputs include:
+#   df    — the county-level data frame from corr_data()
+#   x_col — name of the column to plot on the x-axis (as a string)
+#   y_col — name of the column to plot on the y-axis (as a string)
+#   x_lab — human-readable x-axis label shown on the plot
+#   y_lab — human-readable y-axis label shown on the plot
+# It returns a ggplot object that can be rendered directly by renderPlot.
+build_corr_plot <- function(df, x_col, y_col, x_lab, y_lab) {
+  ggplot(df, aes(x = .data[[x_col]], y = .data[[y_col]])) +
+    # Each point represents one county. alpha = 0.5 adds transparency
+    # so overlapping points (many counties with zero cases) are visible.
+    geom_point(color = "#A61C1C", alpha = 0.5, size = 1.8) +
+    # geom_smooth adds a linear trend line with a shaded 95% confidence
+    # interval. method = "lm" fits a straight line. se = TRUE draws the
+    # confidence band. The line color matches the app's red palette.
+    geom_smooth(method = "lm", se = TRUE,
+                color = "#4A0A0A", fill = "#FADADD", linewidth = 0.9) +
+    # comma from the scales package formats axis tick labels with commas
+    # (e.g., 1000 becomes "1,000"), matching the style of other plots.
+    scale_x_continuous(labels = comma,
+                        expand = expansion(mult = c(0.02, 0.05))) +
+    scale_y_continuous(labels = comma,
+                        expand = expansion(mult = c(0.02, 0.1))) +
+    labs(x = x_lab, y = y_lab) +
+    theme_minimal(base_size = 13) +
+    theme(
+      panel.grid.major   = element_line(color = "#eeeeee"),
+      panel.grid.minor   = element_blank(),
+      axis.text.x        = element_text(size = 11),
+      axis.text.y        = element_text(size = 11),
+      axis.title.x       = element_text(size = 11, margin = margin(t = 8)),
+      axis.title.y       = element_text(size = 11, margin = margin(r = 8)),
+      plot.margin        = margin(10, 15, 10, 50)
+    )
+}
+
+# This function runs cor.test with method = "spearman" on two numeric 
+# vectors and returns a one-row data frame with three columns:
+#   Correlation (rho) — the Spearman rank correlation coefficient
+#   P-value           — probability of observing this rho by chance
+#   Sample Size (n)   — number of counties used in the test
+# exact = FALSE suppresses a warning about ties that occurs when many
+# counties share the same count (e.g., zero), which is common here.
+build_corr_table <- function(x, y) {
+  ct <- cor.test(x, y, method = "spearman", exact = FALSE)
+  data.frame(
+    `Correlation (rho)` = round(ct$estimate, 3),
+    `P-value`           = ifelse(ct$p.value < 0.001,
+                                  "< 0.001",
+                                  as.character(round(ct$p.value, 3))),
+    `Sample Size (n)`   = length(x),
+    # This preserves spaces and parentheses in col names
+    check.names = FALSE   
+  )
+}
+
 #####
 ##### User interface
 #####
