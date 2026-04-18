@@ -718,7 +718,7 @@ server <- function(input, output){
   # y-axis displays the case count formatted with comma separators.
   # A shaded area is drawn beneath the line using geom_area.
   output$line_plot <- renderPlot({
-    wk  <- weekly_cases()
+    wk <- weekly_cases()
     
     # The x-axis tick positions are set to the earliest week date falling
     # within each calendar month. The slice_min function retains only one
@@ -803,22 +803,25 @@ server <- function(input, output){
   ### Top locations table
   
   # The renderTable function creates the top locations table. The table
-  # displays the ten locations with the highest case counts under the
-  # current filter settings. When the map level is set to state, one row
-  # per state is returned. When set to county, one row per county is
-  # returned with a combined location label in the format
-  # "County, State". The digits argument suppresses decimal places and the
-  # format.args argument adds comma separators to case count values.
+  # displays the top N locations with the highest case counts under the
+  # current filter settings, where N is controlled by the Top States slider.
+  # When the map level is set to state, one row per state is returned.
+  # When set to county, one row per county is returned with a combined
+  # location label in the format "County, State".
+  # The digits argument suppresses decimal places and the format.args
+  # argument adds comma separators to case count values.
   output$top_table <- renderTable({
     if (input$map_level == "state") {
       filtered_state() %>%
         arrange(desc(cases)) %>%
-        slice_head(n = 10) %>%
+        # Use input$top_n_states so this table respects the slider.
+        slice_head(n = input$top_n_states) %>%
         rename(State = state, `Total cases` = cases)
     } else {
       filtered_county() %>%
         arrange(desc(cases)) %>%
-        slice_head(n = 10) %>%
+        # Use input$top_n_states so this table respects the slider.
+        slice_head(n = input$top_n_states) %>%
         mutate(Location = paste0(county, " County, ", state)) %>%
         select(Location, `Total cases` = cases)
     }
