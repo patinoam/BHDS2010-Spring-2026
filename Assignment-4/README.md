@@ -13,9 +13,9 @@ information specifies the state and county in which each case occurred, as well 
 subject's vaccination status.
 
 ## Team Members and Roles
-Angelica:
-Jenny:
-Jess: README documentation
+Angelica: filters, map, and line plots
+Jenny: data overview, treands, and comparison
+Jess: README documentation and summary statistics
 
 ## Raw Data Description
 
@@ -31,8 +31,21 @@ the main project directory
 install.packages(c("shiny", "tiddyverse"))
 6. Load the libraries and their dependencies via library("shiny") and
 library("tiddyverse")
+7. Run each script in sequence **FINSIH THIS ONCE ORDER OF PLOTS IS DECIDED**
+8. Each visualization will appear in the plots pane
+9. Once all code runs successfully, knit the file Assignment-4.Rmd into a
+PDF to create the final compiled report
 
 ## Version Control Workflow
+1. The same repository for Assignment 3 on Github was used under Angelica’s account
+2. A separate folder for Assignment 4 was created
+3. Angelica populated the BHDS.2010/Assignment-4 folder with the base of the
+Assingment-4.Rmd file, uploaded the measles_county_all_updates_detailed.csv file,
+and populated the README.md file
+4. Within her branch, Angelica separated the geographic data so that the county
+and state information were stored in separate columns, ensured that all categorical data
+was recognized as factors, and converted the date data to type Date. Angelica committed her
+work and pushed her changes into the cloud and submitted a pull request for her group members
 
 
 
