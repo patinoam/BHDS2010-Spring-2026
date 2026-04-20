@@ -27,8 +27,10 @@ Jess: README documentation
 1. The same repository for Assignment 3 on Github was used under Angelica’s account
 2. A separate folder for Assignment 4 was created
 3. Angelica populated the BHDS.2010/Assignment-4 folder with the base of the Assingment-4.Rmd file, uploaded the measles_county_all_updates_detailed.csv file, and populated the README.md file
-4. Within Angelica's branch amp/assignment-4-data-preparation, she installed and loaded the following packages: shiny, leaflet, tigris, sf, scales, lubridate, and tidyverse. She then entered developer_mode using the code developer_mode <- TRUE to allow for testing within the app. She then loaded the raw data file.
-5. 
+4. Within Angelica's branch amp/assignment-4-data-preparation, she installed and loaded the following packages: shiny, leaflet, tigris, sf, scales, lubridate, and tidyverse. She then entered developer_mode using the code developer_mode <- TRUE to allow for testing within the app. She then loaded the raw data file via the read.csv() command. State and county data was separated and treated as factors for proper analysis. Finally, an outline of the shiny app was created. For all of these changes, Angelica provided commentary to the codes being run. Angelica then committed her work, pushed her changes, and created a pull request.
+5. Within the branch amp/assignment-4-add-more-app-features, Angelica set developer_mode to FALSE, provided commentary, and committed her changes.
+6. Next, Angelica added correlation plots and table outputs for the correlation analysis tab, provided commentary on the code, and committed her changes.
+
 
 ## Commit and Pull Request Protocol
 Each group member would regularly commit their changes using a simple descriptor of the changes made (ex. "add measles data file," "create separate columns for county and state", etc.). All commits were pushed to the remote
