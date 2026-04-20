@@ -28,7 +28,7 @@ Jess: README documentation
 2. A separate folder for Assignment 4 was created
 3. Angelica populated the BHDS.2010/Assignment-4 folder with the base of the Assingment-4.Rmd file, uploaded the measles_county_all_updates_detailed.csv file, and populated the README.md file
 4. Within Angelica's branch amp/assignment-4-data-preparation, she installed and loaded the following packages: shiny, leaflet, tigris, sf, scales, lubridate, and tidyverse. She then entered developer_mode using the code developer_mode <- TRUE to allow for testing within the app. She then loaded the raw data file via the read.csv() command. State and county data was separated and treated as factors for proper analysis. Finally, an outline of the shiny app was created. For all of these changes, Angelica provided commentary to the codes being run. Angelica then committed her work, pushed her changes, and created a pull request.
-5. The merge pull request was successfully managed.
+5. Jess and Jenny approved the pull request, and the data was merged with the main branch without errors.
 6. Within the branch amp/assignment-4-add-more-app-features, Angelica set developer_mode to FALSE, provided commentary, and committed her changes.
 7. Next, Angelica added correlation plots and table outputs for the correlation analysis tab, added the correlation data reactive coding using Spearman correlation figures for the correlation analysis tab, provided commentary on the code, and used the tabPanel command to create the correlation analysis tab and defined all necessary outputs. For each of these, she provided commentary on her code and committed her changes.
 10. Next, Angelica added helper functions for the correlation scatter plot and table to be seen in the correlation analysis tab. She provided commenatry on her code and committed her changes.
@@ -37,8 +37,11 @@ Jess: README documentation
 13. For the state summary tab, Angelica defined the state summary table output and added the state summary reactive coding. She then provided commentary on her code and committed her changes.
 14. For the overview tab, Angelica used a slider input to allow users to select the top X number of locations. She also defined the helper functions, and removed redundant coding. Angelica then provided commentary on the slider input and helper functions and committed her changes.
 15. Next, Angelica added filters for the data based on location, provided filtered data reactive coding, and restructured coding to increase readability. She then provided commentary for the data filters that were added and committed her changes.
-16. 
-
+16. Angelica then added helper functions for the data tables, as well as a summary tab sepcifically for the individual states. She then added commentary to her code and committed her changes.
+17. Next, using TabsetPanel and TabsPanel, Angelica restructured her outputs for the overview tab to increase user experience. She also added aesthetic changes, selecting a color pallete for the app's design. Angelica then provided commentary and committed her changes.
+18. Finally, Angelica changed the dashboard title from "Caseload" to "Surveillance," set the developer mode the TRUE so that changes in the app may be tested, and added the DT package for the summary tables. She then provided commentary of these changes and committed her work.
+19. For steps 6-18, Angelica then pushed her code to the main branch and created a pull request.
+20. Jess reviewed the code and presented commentary regarding the output for the cumulative cases by year in the overview tab, as well as the unvaccinated vs local transmission plot in the correlation analysis tab.
 
 ## Commit and Pull Request Protocol
 Each group member would regularly commit their changes using a simple descriptor of the changes made (ex. "add measles data file," "create separate columns for county and state", etc.). All commits were pushed to the remote
