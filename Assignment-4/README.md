@@ -7,9 +7,9 @@ The goal of this project is to combine good coding practices and communication v
 The dataset measles_county_all_updates_detailed.csv records the number of measles cases in the United States from January 1, 2025 until April 9, 2026. The information specifies the state and county in which each case occurred, as well as subject's vaccination status and whether the disease was contracted locally or was imported from somewhere out of state.
 
 ## Team Members and Roles
-Angelica: coding for Shiny app, final document
-Jenny: final document
-Jess: README documentation, final document
+- Angelica: coding for Shiny app, final document
+- Jenny: final document
+- Jess: README documentation, final document
 
 ## Raw Data Description
 Each row represents one lab confirmed case of measels. The columns state the location of the report (including county and state), the US census FIPS code, the location type (all of which are county), the date of the report, the outcome type, and the value. The outcome types are varied consisting of a mixture of imported vs local and vaccinated vs unvaccinated. For individuals in which none of this imformation is known, they are simply given the outcome of lab confirmed. The value column corresponds with the number of that specific outcome type for that date within that county. This information is updated weekly; however, the data for our app consists of cases ranging from January 1, 2025 to April 2, 2026. 
@@ -17,11 +17,11 @@ Each row represents one lab confirmed case of measels. The columns state the loc
 ## Instructions to Run the Code
 1. Clone or download this GitHub repository onto your local computer
 2. Open the project folder in RStudio (clone/download our GitHub repository onto your local computer using File -> New Project -> Version Control -> Git, then paste the repository URL git clone https://github.com/patinoam/BHDS2010-Spring-2026.git
-4. Ensure that the file measles_county_all_updates_detailed.csv is located in the main project directory
-5. Install all required packages if not already installed via the command install.packages(c("shiny", "leaflet", "tigris", "sf", "scales", "lubridate", "tidyverse", "DT")
-6. Load the libraries and their dependencies via library(shiny), library(leaflet), library(sf), library(scales), library(lubridate), library(tidyverse), and library(DT)
-7. Run each script in sequence. First, the code for the table setup, then for the correlation plot and table. Next, run the code for the sidebar layout and the four main output components (total cases, date range, state count, and county count). Then the code for Overview tab which includes the interactive map, two case count figures, and top locations table. Next, the code for the state summary and county summary tabs. Finally, run the code for the last tab, correlation analysis. Once this has been completed, run the server data. This includes the helper reactives, filtered data reactives, geographical data reactives, state summary table reactive, county summary table reactive, and correlation data reactive, as well as the upper panel outputs (i.e. the summary boxes). Finally, run all code for the interactive map, weekly case count plot output, cumulative cases by year chart output, top locations table output, state summary table output, county summary table output, and correlation analysis table output.
-8. Once all code runs successfully, knit the file Assignment-4.Rmd into a PDF to create the final compiled report
+3. Ensure that the file measles_county_all_updates_detailed.csv is located in the main project directory
+4. Install all required packages if not already installed via the command install.packages(c("shiny", "leaflet", "tigris", "sf", "scales", "lubridate", "tidyverse", "DT")
+5. Load the libraries and their dependencies via library(shiny), library(leaflet), library(sf), library(scales), library(lubridate), library(tidyverse), and library(DT)
+6. Run each script in sequence. First, the code for the table setup, then for the correlation plot and table. Next, run the code for the sidebar layout and the four main output components (total cases, date range, state count, and county count). Then the code for Overview tab which includes the interactive map, two case count figures, and top locations table. Next, the code for the state summary and county summary tabs. Finally, run the code for the last tab, correlation analysis. Once this has been completed, run the server data. This includes the helper reactives, filtered data reactives, geographical data reactives, state summary table reactive, county summary table reactive, and correlation data reactive, as well as the upper panel outputs (i.e. the summary boxes). Finally, run all code for the interactive map, weekly case count plot output, cumulative cases by year chart output, top locations table output, state summary table output, county summary table output, and correlation analysis table output.
+7. Once all code runs successfully, knit the file Assignment-4.Rmd into a PDF to create the final compiled report
 
 ## Version Control Workflow
 1. The same repository for Assignment 3 on Github was used under Angelica’s account
@@ -31,18 +31,18 @@ Each row represents one lab confirmed case of measels. The columns state the loc
 5. Jess and Jenny approved the pull request, and the data was merged with the main branch without errors.
 6. Within the branch amp/assignment-4-add-more-app-features, Angelica set developer_mode to FALSE, provided commentary, and committed her changes.
 7. Next, Angelica added correlation plots and table outputs for the correlation analysis tab, added the correlation data reactive coding using Spearman correlation figures for the correlation analysis tab, provided commentary on the code, and used the tabPanel command to create the correlation analysis tab and defined all necessary outputs. For each of these, she provided commentary on her code and committed her changes.
-10. Next, Angelica added helper functions for the correlation scatter plot and table to be seen in the correlation analysis tab. She provided commenatry on her code and committed her changes.
-11. For the county summary tab, Angelica added the summary table output, the corresponding county summary table reactive coding, and the code to create the county summary tab so that the table output listed above would be visible to users. For each of these three steps, Angelica provided commentary and committed her changes.
-12. Angelica next added a slider input to allow users to select the number of desired counties. She then provided commentary and committed her changes.
-13. For the state summary tab, Angelica defined the state summary table output and added the state summary reactive coding. She then provided commentary on her code and committed her changes.
-14. For the overview tab, Angelica used a slider input to allow users to select the top X number of locations. She also defined the helper functions, and removed redundant coding. Angelica then provided commentary on the slider input and helper functions and committed her changes.
-15. Next, Angelica added filters for the data based on location, provided filtered data reactive coding, and restructured coding to increase readability. She then provided commentary for the data filters that were added and committed her changes.
-16. Angelica then added helper functions for the data tables, as well as a summary tab sepcifically for the individual states. She then added commentary to her code and committed her changes.
-17. Next, using TabsetPanel and TabsPanel, Angelica restructured her outputs for the overview tab to increase user experience. She also added aesthetic changes, selecting a color pallete for the app's design. Angelica then provided commentary and committed her changes.
-18. Finally, Angelica changed the dashboard title from "Caseload" to "Surveillance," set the developer mode the TRUE so that changes in the app may be tested, and added the DT package for the summary tables. She then provided commentary of these changes and committed her work.
-19. For steps 6-18, Angelica then pushed her code to the main branch and created a pull request.
-20. Jenny approved the pull request. Jess reviewed the code and presented commentary regarding potential bug in the output for the cumulative cases by year in the overview tab.
-21. Angelica provided explanation for cumulative cases by year. Jess tested explanation and confirmed that no bug was present. Jess approved the pull request, and the data was merged without errors.
+8. Next, Angelica added helper functions for the correlation scatter plot and table to be seen in the correlation analysis tab. She provided commenatry on her code and committed her changes.
+9. For the county summary tab, Angelica added the summary table output, the corresponding county summary table reactive coding, and the code to create the county summary tab so that the table output listed above would be visible to users. For each of these three steps, Angelica provided commentary and committed her changes.
+10. Angelica next added a slider input to allow users to select the number of desired counties. She then provided commentary and committed her changes.
+11. For the state summary tab, Angelica defined the state summary table output and added the state summary reactive coding. She then provided commentary on her code and committed her changes.
+12. For the overview tab, Angelica used a slider input to allow users to select the top X number of locations. She also defined the helper functions, and removed redundant coding. Angelica then provided commentary on the slider input and helper functions and committed her changes.
+13. Next, Angelica added filters for the data based on location, provided filtered data reactive coding, and restructured coding to increase readability. She then provided commentary for the data filters that were added and committed her changes.
+14. Angelica then added helper functions for the data tables, as well as a summary tab sepcifically for the individual states. She then added commentary to her code and committed her changes.
+15. Next, using TabsetPanel and TabsPanel, Angelica restructured her outputs for the overview tab to increase user experience. She also added aesthetic changes, selecting a color pallete for the app's design. Angelica then provided commentary and committed her changes.
+16. Finally, Angelica changed the dashboard title from "Caseload" to "Surveillance," set the developer mode the TRUE so that changes in the app may be tested, and added the DT package for the summary tables. She then provided commentary of these changes and committed her work.
+17. For steps 6-18, Angelica then pushed her code to the main branch and created a pull request.
+18. Jenny approved the pull request. Jess reviewed the code and presented commentary regarding potential bug in the output for the cumulative cases by year in the overview tab.
+19. Angelica provided explanation for cumulative cases by year. Jess tested explanation and confirmed that no bug was present. Jess approved the pull request, and the data was merged without errors.
 
 ## Commit and Pull Request Protocol
 Each group member would regularly commit their changes using a simple descriptor of the changes made (ex. "add measles data file," "create separate columns for county and state", etc.). All commits were pushed to the remote
