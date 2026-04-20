@@ -28,8 +28,13 @@ Jess: README documentation
 2. A separate folder for Assignment 4 was created
 3. Angelica populated the BHDS.2010/Assignment-4 folder with the base of the Assingment-4.Rmd file, uploaded the measles_county_all_updates_detailed.csv file, and populated the README.md file
 4. Within Angelica's branch amp/assignment-4-data-preparation, she installed and loaded the following packages: shiny, leaflet, tigris, sf, scales, lubridate, and tidyverse. She then entered developer_mode using the code developer_mode <- TRUE to allow for testing within the app. She then loaded the raw data file via the read.csv() command. State and county data was separated and treated as factors for proper analysis. Finally, an outline of the shiny app was created. For all of these changes, Angelica provided commentary to the codes being run. Angelica then committed her work, pushed her changes, and created a pull request.
-5. Within the branch amp/assignment-4-add-more-app-features, Angelica set developer_mode to FALSE, provided commentary, and committed her changes.
-6. Next, Angelica added correlation plots and table outputs for the correlation analysis tab, provided commentary on the code, and committed her changes.
+5. The merge pull request was successfully managed.
+6. Within the branch amp/assignment-4-add-more-app-features, Angelica set developer_mode to FALSE, provided commentary, and committed her changes.
+7. Next, Angelica added correlation plots and table outputs for the correlation analysis tab, provided commentary on the code, and committed her changes.
+8. After that, Angelica added the correlation data reactive using Spearman correlation figures for the correlation analysis tabl, provided commentary on the code, and committed her changes.
+9. Then, Angelica used the tabPanel command to create the correlation analysis tab and defined all necessary outputs. She then provided commentary on her code and committed her changes.
+10. Next, Angelica added helper functions for the correlation scatter plot and table to be seen in the correlation analysis tab. She provided commenatry on her code and committed her changes.
+11. 
 
 
 ## Commit and Pull Request Protocol
