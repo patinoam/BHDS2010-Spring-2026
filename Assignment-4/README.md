@@ -12,7 +12,7 @@ Jenny:
 Jess: README documentation 
 
 ## Raw Data Description
-
+Each row represents one lab confirmed case of measels. The columns state the location of the report (including county and state), the US census FIPS code, the location type (all of which are county), the date of the report, the outcome type, and the value. The outcome types are varied consisting of a mixture of imported vs local and vaccinated vs unvaccinated. For individuals in which none of this imformation is known, they are simply given the outcome of lab confirmed. The value column corresponds with the number of that specific outcome type for that date within that county. This information is updated weekly; however, the data for our app consists of cases ranging from January 1, 2025 to April 2, 2026. 
 
 ## Instructions to Run the Code
 1. Clone or download this GitHub repository onto your local computer
