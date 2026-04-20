@@ -4,7 +4,7 @@
 The goal of this project is to combine good coding practices and communication via GitHub to collaborate as a team to create a Shiny App. For this project, we will employ RStudio to analyze and display our data via regressive coding (More to be added later)
 
 ## Direct Objective of Data
-The dataset measles_county_all_updates_detailed.csv records the number of measles cases in the United States from January 1, 2025 until April 9, 2026. The information specifies the state and county in which each case occurred, as well as subject's vaccination status.
+The dataset measles_county_all_updates_detailed.csv records the number of measles cases in the United States from January 1, 2025 until April 9, 2026. The information specifies the state and county in which each case occurred, as well as subject's vaccination status and whether the disease was contracted locally or was imported from somewhere out of state.
 
 ## Team Members and Roles
 Angelica: filters, map, line plots, and summary statistics
@@ -42,6 +42,7 @@ Jess: README documentation
 18. Finally, Angelica changed the dashboard title from "Caseload" to "Surveillance," set the developer mode the TRUE so that changes in the app may be tested, and added the DT package for the summary tables. She then provided commentary of these changes and committed her work.
 19. For steps 6-18, Angelica then pushed her code to the main branch and created a pull request.
 20. Jess reviewed the code and presented commentary regarding the output for the cumulative cases by year in the overview tab, as well as the unvaccinated vs local transmission plot in the correlation analysis tab.
+21. **Need to add final steps**
 
 ## Commit and Pull Request Protocol
 Each group member would regularly commit their changes using a simple descriptor of the changes made (ex. "add measles data file," "create separate columns for county and state", etc.). All commits were pushed to the remote
@@ -49,7 +50,6 @@ repository before initiating the pull request. When a pull request was initiated
 request. 
 
 ## Summary of Results
-Both the top locations listing and the interactive map illustrate the highest location count by state within the Untied States. The listing and amount of shading on the map both visualize that South Carolina holds the highest Covid count, with Texas in a close second. 
-
+Both the top locations listing and the interactive map illustrate the highest location count by state within the Untied States. The listing and amount of shading on the map both visualize that South Carolina holds the highest measels count, with Texas in a close second. Of these, Texas is ranked second in total state population while South Carolina is 23rd most populated. While California holds only 59 total measels cases, they have the highest count of imported cases at 26; however, South Dakota holds the highest proportion of imported cases at 0.792. In contrast, multiple states are tied for 0.00 imported cases, included Kansas and Utah, both of which are listed in the top 10 for counts of local transmission cases. Looking closer at South Carolina, we see that of the states the hightest measels case count, South Carolina also holds by far the highest SD at 702.86 with Arizona in second at 110.47. Of South Carolina's 1,000 cases, 995 were local transmission, all of which occurred in only 2 counties: Upstate and Sumter. Of the 1,000 cases that occurred in South Carolina, 54 individuals were vaccinated while 946 were note, meaning 94.6% of all individuals were contracted the measels in SC were not vaccinated for the disease.There were 4 states who had 0 cases of measles: New Hampshire, Delaware, West Virginia, and Mississippi. Of these 4, Delaware and New Hampshire are ranked 44th and 40th respectively in state population count. 
 
 ## Concluding/Additional Remarks and Notes
