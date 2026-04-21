@@ -455,26 +455,26 @@ ui <- fluidPage(
           "Overview",
           br(),
 
-        # The leafletOutput function declares the map output component.
-        # The outputId "map" is used in the server to render and update
-        # the map. Width is set to 100% and height to 480 pixels.
-        leafletOutput("map", width = "100%", height = "480px"),
-        br(),
+          # The leafletOutput function declares the map output component.
+          # The outputId "map" is used in the server to render and update
+          # the map. Width is set to 100% and height to 480 pixels.
+          leafletOutput("map", width = "100%", height = "480px"),
+          br(),
 
-        # The plotOutput function declares the weekly case count plot.
-        h4("Weekly case counts"),
-        plotOutput("line_plot", height = "260px"),
-        br(),
+          # The plotOutput function declares the weekly case count plot.
+          h4("Weekly case counts"),
+          plotOutput("line_plot", height = "260px"),
+          br(),
 
-      # The plotOutput function declares the cumulative cases by year chart.
-        h4("Cumulative cases by year"),
-        plotOutput("cumulative_plot", height = "260px"),
-        br(),
+        # The plotOutput function declares the cumulative cases by year chart.
+          h4("Cumulative cases by year"),
+          plotOutput("cumulative_plot", height = "260px"),
+          br(),
 
-        # The tableOutput function declares the top locations table.
-        h4("Top locations"),
-        tableOutput("top_table")
-        ),
+          # The tableOutput function declares the top locations table.
+          h4("Top locations"),
+          tableOutput("top_table")
+          ),
 
         # The State Summary tab contains the per-state statistics table.
         tabPanel(
@@ -623,7 +623,7 @@ server <- function(input, output){
   filtered_county <- reactive({
     filtered_raw() %>%
       group_by(fips, state, county) %>%
-      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
+      summarize(cases = sum(value, na.rm = TRUE), .groups = "drop")
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
   # The filtered_state reactive groups the filtered data by state and
@@ -633,7 +633,7 @@ server <- function(input, output){
   filtered_state <- reactive({
     filtered_raw() %>%
       group_by(state) %>%
-      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop")
+      summarize(cases = sum(value, na.rm = TRUE), .groups = "drop")
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
   # The weekly_cases reactive groups the filtered data by week and computes
@@ -643,7 +643,7 @@ server <- function(input, output){
   weekly_cases <- reactive({
     filtered_raw() %>%
       group_by(week) %>%
-      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
+      summarize(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
       arrange(week)
   }) %>% bindEvent(input$update, ignoreNULL = FALSE)
 
@@ -661,7 +661,7 @@ server <- function(input, output){
         month = month(date)
       ) %>%
       group_by(year, month) %>%
-      summarise(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
+      summarize(cases = sum(value, na.rm = TRUE), .groups = "drop") %>%
       arrange(year, month) %>%
       group_by(year) %>%
       mutate(cumulative = cumsum(cases)) %>%
@@ -711,7 +711,12 @@ server <- function(input, output){
     }
     geo %>%
       left_join(filtered_county(), by = c("GEOID" = "fips")) %>%
-      mutate(cases = replace_na(cases, 0))
+      mutate(
+        cases = replace_na(cases, 0),
+        # STATE_NAME from tigris is always populated; state from the join
+        # is NA for any county with zero cases. coalesce picks the first non-NA.
+        state = coalesce(state, STATE_NAME)
+      )
   })
 
   ### State summary table reactive
