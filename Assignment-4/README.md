@@ -8,7 +8,7 @@ The dataset measles_county_all_updates_detailed.csv records the number of measle
 
 ## Team Members and Roles
 - Angelica: coding for Shiny app, final document
-- Jenny: final document
+- Jenny: potential shiny app mockup
 - Jess: README documentation, final document
 
 ## Raw Data Description
