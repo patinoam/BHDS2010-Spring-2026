@@ -482,11 +482,29 @@ ui <- fluidPage(
           br(),
 
           # A brief description for the table.
-          p("Summary statistics for the top states by total case count,
-            based on the selected filters. The number of states shown is
-            controlled by the Top States slider in the sidebar. Proportion
-            and rate columns use all case types regardless of the Case
-            Type filter."),
+          p(" Below is a table of summary statistics for the top states 
+            by total case count, based on the filter settings for case type, 
+            date range, and selected states. The number of states shown is 
+            determined by the top number of states slider in the sidebar 
+            filter settings.", 
+            br(),
+            br(),
+
+            "The descriptive statistics columns (total count, range [minimum, 
+            maximum], mean, standard deviation, median, interquartile range, 
+            number of affected counties) are based on the case type selected. 
+            The statistics are calculated over counties within a given state.",
+            br(),
+            br(),
+
+            "The proportion and rate columns (proportion of imported cases, 
+            proportion of local cases, incidence rate ratio) are based on all 
+            case types. The proportion of imported cases is calculated as the 
+            number of imported cases divided by the sum of imported and local 
+            cases. The proportion of local cases is calculated as the number of 
+            imported cases divided by the sum of imported and local cases. The 
+            incidence rate ratio (IRR) is calculated as the ratio of unvaccinated 
+            cases to vaccinated cases."),
 
           # The dataTableOutput function declares the interactive summary
           # table. The outputId "state_summary_table" is matched to a
@@ -500,12 +518,31 @@ ui <- fluidPage(
           br(),
 
           # A brief description for the table.
-          p("Summary statistics for the top counties (by total case count)
-            within each of the top states, based on the selected filters.
-            The number of states and counties shown is controlled by the
-            Top States and Top Counties sliders in the sidebar. Proportion
-            and rate columns use all case types regardless of the Case
-            Type filter."),
+          p("Below is a table of summary statistics for the top counties 
+            by total case count within each of the top states, based on the 
+            filter settings for case type, date range, and selected states. 
+            The number of states shown is based on the top number of states 
+            slider, and the number of counties per state shown is based on 
+            the top number of counties (per state) slider, both of which are in 
+            the sidebar filter settings.",
+            br(),
+            br(),
+          
+            "The descriptive statistics columns (total count, range [minimum, 
+            maximum], mean, standard deviation, median, interquartile range, 
+            number of affected counties) are based on the case type selected. 
+            The statistics are calculated over reporting days for a given county.",
+            br(),
+            br(),
+          
+            "The proportion and rate columns (proportion of imported cases, 
+            proportion of local cases, incidence rate ratio) are based on all 
+            case types. The proportion of imported cases is calculated as the 
+            number of imported cases divided by the sum of imported and local 
+            cases. The proportion of local cases is calculated as the number of 
+            imported cases divided by the sum of imported and local cases. The 
+            incidence rate ratio (IRR) is calculated as the ratio of unvaccinated 
+            cases to vaccinated cases."),
 
           # The dataTableOutput function declares the interactive county
           # summary table. The outputId "county_summary_table" is matched
@@ -526,7 +563,9 @@ ui <- fluidPage(
           p("Spearman rank correlations between the specified case types, 
             computed at the county level using total counts over the selected 
             date range and state filter. Note that case types are fixed by the 
-            correlation being examined."),
+            correlation being examined. A scatter plot with a linear trend line 
+            is shown in each of the figures below with shading as the 95% 
+            confidence interval."),
 
           # The plotOutput function declares the scatter plot for the
           # imported vs. local correlation.
