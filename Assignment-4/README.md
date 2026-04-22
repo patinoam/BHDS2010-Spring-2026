@@ -1,4 +1,4 @@
-#BHDS.2010 Assignment 4
+#BHDS2010 Assignment 4
 
 ##Project Purpose
 The goal of this project is to combine good coding practices and communication
