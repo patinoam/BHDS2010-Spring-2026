@@ -288,9 +288,9 @@ ui <- fluidPage(
       p("Although measles was declared eliminated in the United States in 
       2000 by the Centers for Disease Control and Prevention, recent years 
       have shown a concerning resurgence in reported cases. Tracking measles 
-      cases improves awareness of outbreak trends and potential reemergence 
-      of disease, which can aid in deploying public health initiatives to 
-      prevent further spread.",
+      cases improves awareness of outbreak trends, patterns of transmission, 
+      and potential reemergence of disease, which can aid in deploying public 
+      health initiatives to prevent further spread.",
       br(),
       br()),
 
@@ -399,8 +399,8 @@ ui <- fluidPage(
         br(),
         "Data source:",
         a(href="https://github.com/CSSEGISandData/measles_data", "CSSEGISandData"),
-        " from Johns Hopkins University Measles Tracking Team - International Vaccine 
-        Access Center (IVAC), Bloomberg School of Public Health; Center for 
+        " from the Johns Hopkins University Measles Tracking Team - International 
+        Vaccine Access Center (IVAC), Bloomberg School of Public Health; Center for 
         Systems Science and Engineering (CSSE), Whiting School of Engineering; 
         Bloomberg Center for Government Excellence, Johns Hopkins University"), 
 
@@ -500,7 +500,7 @@ ui <- fluidPage(
           br(),
 
           # A brief description for the table.
-          p(" Below is a table of summary statistics for the top states 
+          p("Below is a table of summary statistics for the top states 
             by total case count, based on the filter settings for case type, 
             date range, and selected states. The number of states shown is 
             determined by the top number of states slider in the sidebar 
