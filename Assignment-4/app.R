@@ -285,6 +285,14 @@ ui <- fluidPage(
     # The sidebar panel contains all input controls. Values selected here
     # are passed to the server using the inputId of each control.
     sidebarPanel(
+      p("Although measles was declared eliminated in the United States in 
+      2000 by the Centers for Disease Control and Prevention, recent years 
+      have shown a concerning resurgence in reported cases. Tracking measles 
+      cases improves awareness of outbreak trends and potential reemergence 
+      of disease, which can aid in deploying public health initiatives to 
+      prevent further spread.",
+      br(),
+      br()),
 
       ### Inputs
 
@@ -385,7 +393,17 @@ ui <- fluidPage(
         label   = "Update",
         width   = "100%",
         class   = "btn-danger"
-      )
+      ),
+
+      p(br(),
+        br(),
+        "Data source:",
+        a(href="https://github.com/CSSEGISandData/measles_data", "CSSEGISandData"),
+        " from Johns Hopkins University Measles Tracking Team - International Vaccine 
+        Access Center (IVAC), Bloomberg School of Public Health; Center for 
+        Systems Science and Engineering (CSSE), Whiting School of Engineering; 
+        Bloomberg Center for Government Excellence, Johns Hopkins University"), 
+
     ),
     
     # The main panel contains all output components. Each output function
