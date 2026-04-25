@@ -1,0 +1,16 @@
+---
+title: "Assignment 4"
+author: "Group 2"
+date: "2026-04-25"
+output: pdf_document
+header-includes:
+  - \usepackage{pdfpages}
+---
+
+\includepdf[pages=-]{BHDS2010-Assignment4-Documentation.pdf}
+
+# Shiny App Code
+
+TODO add description
+```{r, code = readLines("app.R"), echo=TRUE, eval=FALSE}
+```
