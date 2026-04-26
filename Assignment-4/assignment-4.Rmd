@@ -11,6 +11,36 @@ header-includes:
 
 # Shiny App Code
 
-TODO add description
+The code is organized into the following sections: 
+
+- Install and load packages
+- Data loading and preparation
+- Plain (non-reactive) helper functions
+  - Color palette
+  - Data filter
+  - Table setup
+  - Correlation plot and table
+- User interface
+  - Inputs
+  - Outputs
+- Server
+  - Reactives
+    - Helper reactives
+    - Filtered data reactives
+    - Geographical data reactives
+    - State summary table reactive
+    - County summary table reactive
+    - Correlation data reactive
+  - Upper panel summary box outputs
+  - Overview tab outputs
+    - Interactive map
+    - Weekly case count plot
+    - Cumulative cases by year chart
+    - Top locations table
+  - State summary tab table output
+  - County summary tab table output
+  - Correlation analysis tab outputs
+- Launch App  
+\
 ```{r, code = readLines("app.R"), echo=TRUE, eval=FALSE}
 ```
